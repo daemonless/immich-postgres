@@ -52,11 +52,13 @@ LABEL org.opencontainers.image.title="Immich PostgreSQL" \
     io.daemonless.arch="${FREEBSD_ARCH}" \
     io.daemonless.config-mount="/config" \
     io.daemonless.category="Database" \
+    io.daemonless.pkg-source="containerfile" \
     io.daemonless.packages="${PACKAGES}"
 
 # Install PostgreSQL, then remove LLVM JIT (saves ~2GB, JIT not needed for Immich)
 RUN pkg update && \
     pkg install -y ${PACKAGES} && \
+    mkdir -p /app && pkg info postgresql14-server | sed -n 's/.*Version.*: *//p' > /app/version && \
     pkg delete -fy llvm19 perl5 python311 || true && \
     pkg autoremove -y || true && \
     pkg clean -ay && \

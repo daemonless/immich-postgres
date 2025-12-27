@@ -1,67 +1,16 @@
-name: Build and Push
+name: Build FreeBSD Container
 
 on:
   push:
     branches: [main]
-    paths-ignore:
-      - '*.md'
-      - 'docs/**'
-      - 'LICENSE'
-      - '.gitignore'
+    paths-ignore: ['*.md', 'LICENSE', '.gitignore']
+  pull_request:
+    branches: [main]
   workflow_dispatch:
-
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Log in to Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Extract metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            type=raw,value=latest,enable={{is_default_branch}}
-            type=sha,prefix=
-
-      # Note: This is a FreeBSD container - actual builds happen on Woodpecker CI
-      # This workflow validates the Containerfile and updates GitHub metadata
-      - name: Validate Containerfile
-        run: |
-          echo "Validating Containerfile syntax..."
-          if grep -q "^FROM" Containerfile; then
-            echo "Containerfile appears valid"
-          else
-            echo "Error: No FROM instruction found"
-            exit 1
-          fi
-
-      - name: Update repo description
-        uses: actions/github-script@v7
-        if: github.event_name == 'push'
-        continue-on-error: true
-        with:
-          script: |
-            github.rest.repos.update({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              description: "PostgreSQL 14 with pgvector + VectorChord for Immich (FreeBSD)",
-              homepage: "https://immich.app"
-            })
+    uses: daemonless/daemonless/.github/workflows/build-app.yml@main
+    with:
+      image_name: immich-postgres
+    secrets: inherit
