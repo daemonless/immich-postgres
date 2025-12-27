@@ -54,9 +54,11 @@ LABEL org.opencontainers.image.title="Immich PostgreSQL" \
     io.daemonless.category="Database" \
     io.daemonless.packages="${PACKAGES}"
 
-# Install PostgreSQL runtime
+# Install PostgreSQL, then remove LLVM JIT (saves ~2GB, JIT not needed for Immich)
 RUN pkg update && \
     pkg install -y ${PACKAGES} && \
+    pkg delete -fy llvm19 perl5 python311 || true && \
+    pkg autoremove -y || true && \
     pkg clean -ay && \
     rm -rf /var/cache/pkg/* /var/db/pkg/repos/*
 
