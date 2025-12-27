@@ -1,0 +1,36 @@
+#!/bin/sh
+# Initialize PostgreSQL database if needed
+
+PGDATA="${PGDATA:-/config/data}"
+
+# Fix permissions
+chown -R bsd:bsd /config /run/postgresql
+
+# Initialize database if not exists
+if [ ! -f "$PGDATA/PG_VERSION" ]; then
+    echo "Initializing PostgreSQL database..."
+
+    # Create password file for initdb (readable by bsd user)
+    echo "${POSTGRES_PASSWORD:-postgres}" > /tmp/pwfile
+    chown bsd:bsd /tmp/pwfile
+
+    su -m bsd -c "/usr/local/bin/initdb \
+        --pgdata=$PGDATA \
+        --username=${POSTGRES_USER:-postgres} \
+        --pwfile=/tmp/pwfile \
+        --auth-host=scram-sha-256 \
+        --auth-local=trust \
+        --encoding=UTF8"
+
+    rm -f /tmp/pwfile
+
+    # Configure to listen on all interfaces and load VectorChord
+    echo "listen_addresses = '*'" >> "$PGDATA/postgresql.conf"
+    echo "shared_preload_libraries = 'vchord'" >> "$PGDATA/postgresql.conf"
+    echo "host all all 0.0.0.0/0 scram-sha-256" >> "$PGDATA/pg_hba.conf"
+    echo "host all all ::/0 scram-sha-256" >> "$PGDATA/pg_hba.conf"
+
+    echo "PostgreSQL initialized."
+else
+    echo "PostgreSQL data directory exists, skipping init."
+fi

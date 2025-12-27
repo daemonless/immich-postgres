@@ -1,0 +1,7 @@
+#!/bin/sh
+exec 2>&1
+
+PGDATA="${PGDATA:-/config/data}"
+
+echo "Starting PostgreSQL..."
+exec s6-setuidgid bsd /usr/local/bin/postgres -D "$PGDATA"

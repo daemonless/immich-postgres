@@ -1,0 +1,42 @@
+#!/bin/sh
+# One-shot service to initialize database after postgres starts
+exec 2>&1
+
+PGDATA="${PGDATA:-/config/data}"
+PGUSER="${POSTGRES_USER:-postgres}"
+
+# Wait for postgres to be ready
+echo "Waiting for PostgreSQL to be ready..."
+for i in $(seq 1 30); do
+    if su -m bsd -c "pg_isready -q"; then
+        break
+    fi
+    sleep 1
+done
+
+# Check if already initialized
+if [ -f "$PGDATA/.extensions_done" ]; then
+    echo "Database already initialized."
+    exec s6-svc -O /run/s6/services/init-db
+fi
+
+echo "Initializing database extensions..."
+
+# Create database if needed
+if [ -n "${POSTGRES_DB}" ] && [ "${POSTGRES_DB}" != "postgres" ]; then
+    su -m bsd -c "createdb -U $PGUSER ${POSTGRES_DB} 2>/dev/null || true"
+    DB="${POSTGRES_DB}"
+else
+    DB="postgres"
+fi
+
+# Enable extensions for Immich
+su -m bsd -c "psql -U $PGUSER -d $DB -c 'CREATE EXTENSION IF NOT EXISTS vector;'"
+su -m bsd -c "psql -U $PGUSER -d $DB -c 'CREATE EXTENSION IF NOT EXISTS vchord;'"
+su -m bsd -c "psql -U $PGUSER -d $DB -c 'CREATE EXTENSION IF NOT EXISTS pg_trgm;'"
+
+touch "$PGDATA/.extensions_done"
+echo "Database initialized with pgvector + VectorChord."
+
+# Mark this service as done (oneshot)
+exec s6-svc -O /run/s6/services/init-db
