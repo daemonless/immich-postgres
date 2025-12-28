@@ -28,7 +28,7 @@ podman run -d --name immich-postgres \
   ghcr.io/daemonless/immich-postgres:latest
 ```
 
-**Note:** The `org.freebsd.jail.allow.sysvipc=true` annotation is required for PostgreSQL shared memory.
+**Note:** The `org.freebsd.jail.allow.sysvipc=true` annotation is required for PostgreSQL shared memory. This requires a patched version of `ocijail`. See the [ocijail patch guide](https://daemonless.io/guides/ocijail-patch/) for build instructions.
 
 ## podman-compose
 
