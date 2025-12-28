@@ -2,6 +2,9 @@
 
 PostgreSQL 14 with pgvector + VectorChord for [Immich](https://immich.app/).
 
+!!! note "Part of the Immich Stack"
+    This is just one component of Immich. For the complete setup (docker-compose, configuration, etc.), please see the [Daemonless Immich Stack](https://github.com/daemonless/immich).
+
 Drop-in compatible with official Immich PostgreSQL image.
 
 ## Environment Variables
