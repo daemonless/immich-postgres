@@ -39,6 +39,7 @@ RUN fetch -qo /tmp/vectorchord.tar.gz \
 FROM ghcr.io/daemonless/base:${BASE_VERSION}
 
 ARG FREEBSD_ARCH=amd64
+ARG PKG_NAME=postgresql14-server
 ARG PACKAGES="postgresql14-server postgresql14-contrib"
 
 LABEL org.opencontainers.image.title="Immich PostgreSQL" \
@@ -52,7 +53,7 @@ LABEL org.opencontainers.image.title="Immich PostgreSQL" \
     io.daemonless.arch="${FREEBSD_ARCH}" \
     io.daemonless.config-mount="/config" \
     io.daemonless.category="Database" \
-    io.daemonless.pkg-source="containerfile" \
+    io.daemonless.pkg-name="${PKG_NAME}" \
     io.daemonless.packages="${PACKAGES}"
 
 # Install PostgreSQL, then remove LLVM JIT (saves ~2GB, JIT not needed for Immich)
