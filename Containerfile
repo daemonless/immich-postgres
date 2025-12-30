@@ -52,7 +52,7 @@ LABEL org.opencontainers.image.title="Immich PostgreSQL" \
     io.daemonless.port="5432" \
     io.daemonless.arch="${FREEBSD_ARCH}" \
     io.daemonless.config-mount="/config" \
-    io.daemonless.category="Database" \
+    io.daemonless.category="Databases" \
     io.daemonless.pkg-name="${PKG_NAME}" \
     io.daemonless.packages="${PACKAGES}"
 
