@@ -66,5 +66,8 @@ COPY --from=builder /usr/local/share/postgresql/extension/vchord* /usr/local/sha
 RUN chmod 644 /usr/local/share/postgresql/extension/vchord* && \
     chmod 755 /usr/local/lib/postgresql/vchord.so
 
+# Copy init scripts for extensions
+COPY docker-entrypoint-initdb.d/ /docker-entrypoint-initdb.d/
+
 # Immich-specific defaults
 ENV POSTGRES_DB=immich
