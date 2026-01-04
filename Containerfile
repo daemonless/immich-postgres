@@ -70,4 +70,5 @@ RUN chmod 644 /usr/local/share/postgresql/extension/vchord* && \
 COPY docker-entrypoint-initdb.d/ /docker-entrypoint-initdb.d/
 
 # Immich-specific defaults
-ENV POSTGRES_DB=immich
+ENV POSTGRES_DB=immich \
+    POSTGRES_SHARED_PRELOAD_LIBRARIES=vchord
