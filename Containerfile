@@ -39,7 +39,7 @@ RUN fetch -qo /tmp/vectorchord.tar.gz \
 
 # Production image - layer on postgres:14
 ARG PG_VERSION
-FROM localhost/postgres:${PG_VERSION}
+FROM ghcr.io/daemonless/postgres:${PG_VERSION}
 
 ARG FREEBSD_ARCH=amd64
 ARG VECTORCHORD_VERSION=0.4.3
