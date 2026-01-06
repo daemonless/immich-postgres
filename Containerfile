@@ -54,7 +54,8 @@ LABEL org.opencontainers.image.title="Immich PostgreSQL" \
     io.daemonless.port="5432" \
     io.daemonless.arch="${FREEBSD_ARCH}" \
     io.daemonless.category="Databases" \
-    io.daemonless.vectorchord-version="${VECTORCHORD_VERSION}"
+    io.daemonless.vectorchord-version="${VECTORCHORD_VERSION}" \
+    org.freebsd.jail.allow.sysvipc="required"
 
 # Copy built extensions from builder
 COPY --from=builder /usr/local/lib/postgresql/vector.so /usr/local/lib/postgresql/
