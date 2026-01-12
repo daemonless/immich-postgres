@@ -1,36 +1,17 @@
-# immich-postgres
+# Immich PostgreSQL
 
-PostgreSQL 14 with pgvector + VectorChord for [Immich](https://immich.app/).
+PostgreSQL 14 with pgvector/pgvecto.rs extensions for Immich.
 
-!!! note "Part of the Immich Stack"
-    This is just one component of Immich. For the complete setup (docker-compose, configuration, etc.), please see the [Daemonless Immich Stack](https://github.com/daemonless/immich).
+| | |
+|---|---|
+| **Port** | 5432 |
+| **Registry** | `ghcr.io/daemonless/immich-postgres` |
+| **Source** | [https://github.com/immich-app/immich](https://github.com/immich-app/immich) |
+| **Website** | [https://immich.app/](https://immich.app/) |
 
-Drop-in compatible with official Immich PostgreSQL image.
+## Deployment
 
-## Environment Variables
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `POSTGRES_USER` | Database superuser name | `postgres` |
-| `POSTGRES_PASSWORD` | Superuser password | `postgres` |
-| `POSTGRES_DB` | Default database to create | `immich` |
-| `PGDATA` | Data directory location | `/config/data` |
-
-## Quick Start
-
-```bash
-podman run -d --name immich-postgres \
-  --annotation 'org.freebsd.jail.allow.sysvipc=true' \
-  -p 5432:5432 \
-  -e POSTGRES_PASSWORD=postgres \
-  -e POSTGRES_DB=immich \
-  -v /containers/immich/postgres:/config \
-  ghcr.io/daemonless/immich-postgres:latest
-```
-
-**Note:** The `org.freebsd.jail.allow.sysvipc=true` annotation is required for PostgreSQL shared memory. This requires a patched version of `ocijail`. See the [ocijail patch guide](https://daemonless.io/guides/ocijail-patch/) for build instructions.
-
-## podman-compose
+### Podman Compose
 
 ```yaml
 services:
@@ -38,60 +19,71 @@ services:
     image: ghcr.io/daemonless/immich-postgres:latest
     container_name: immich-postgres
     environment:
+      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=immich
     volumes:
-      - /data/config/postgres:/config
+      - /path/to/containers/immich-postgres/var/lib/postgresql/data:/var/lib/postgresql/data
     ports:
       - 5432:5432
-    annotations:
-      org.freebsd.jail.allow.sysvipc: "true"
     restart: unless-stopped
 ```
 
-## Tags
+### Podman CLI
 
-| Tag | Source | Description |
-|-----|--------|-------------|
-| `:latest` | `databases/postgresql14-server` | FreeBSD latest packages (Alias for :pkg-latest) |
-| `:pkg` | `databases/postgresql14-server` | FreeBSD quarterly packages |
-| `:pkg-latest` | `databases/postgresql14-server` | FreeBSD latest packages |
+```bash
+podman run -d --name immich-postgres \
+  -p 5432:5432 \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=postgres \
+  -e POSTGRES_DB=immich \
+  -v /path/to/containers/immich-postgres/var/lib/postgresql/data:/var/lib/postgresql/data \ 
+  ghcr.io/daemonless/immich-postgres:latest
+```
+Access at: `http://localhost:5432`
 
-## Volumes
+### Ansible
+
+```yaml
+- name: Deploy immich-postgres
+  containers.podman.podman_container:
+    name: immich-postgres
+    image: ghcr.io/daemonless/immich-postgres:latest
+    state: started
+    restart_policy: always
+    env:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: "immich"
+    ports:
+      - "5432:5432"
+    volumes:
+      - "/path/to/containers/immich-postgres/var/lib/postgresql/data:/var/lib/postgresql/data"
+```
+
+## Configuration
+
+### Environment Variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `POSTGRES_USER` | `postgres` | Database superuser (default: postgres) |
+| `POSTGRES_PASSWORD` | `postgres` | Database password (default: postgres) |
+| `POSTGRES_DB` | `immich` | Database name (default: immich) |
+
+### Volumes
 
 | Path | Description |
 |------|-------------|
-| `/config` | Configuration and data directory (PGDATA is in `/config/data`) |
+| `/var/lib/postgresql/data` | Database data directory |
 
-## Ports
+### Ports
 
-| Port | Description |
-|------|-------------|
-| 5432 | PostgreSQL |
-
-## Features
-
-- **PostgreSQL 14:** Matches official Immich requirements.
-- **pgvector:** 0.8.x extension installed (via ports).
-- **VectorChord:** 0.4.x extension installed (built from source).
-- **Auto-init:** Extensions enabled automatically on database creation.
-
-## Extensions
-
-Extensions are automatically enabled:
-
-```sql
-CREATE EXTENSION IF NOT EXISTS vector;      -- pgvector
-CREATE EXTENSION IF NOT EXISTS vchord;      -- VectorChord
-```
+| Port | Protocol | Description |
+|------|----------|-------------|
+| `5432` | TCP | PostgreSQL Port |
 
 ## Notes
 
-- **User:** `bsd` (UID/GID set via PUID/PGID, default 1000)
-- **Base:** Built on `ghcr.io/daemonless/base-image` (FreeBSD)
-- **Migration:** Fully compatible with official Immich Postgres data.
-
-## Links
-
-- [Immich](https://immich.app/)
-- [PostgreSQL](https://www.postgresql.org/)
+- **User:** `postgres` (UID/GID set via PUID/PGID)
+- **Base:** Built on `ghcr.io/daemonless/base` (FreeBSD)

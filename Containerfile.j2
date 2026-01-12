@@ -39,21 +39,32 @@ FROM ghcr.io/daemonless/postgres:${PG_VERSION}
 
 ARG FREEBSD_ARCH=amd64
 ARG VECTORCHORD_VERSION=0.4.3
+{%- if ports %}
 ARG HEALTHCHECK_ENDPOINT="pg_isready -U postgres"
+{%- else %}
+ARG HEALTHCHECK_ENDPOINT="pg_isready -U postgres"
+{%- endif %}
 
 ENV HEALTHCHECK_CMD="${HEALTHCHECK_ENDPOINT}"
 
 # --- Metadata (Injected by Generator) ---
-LABEL org.opencontainers.image.title="Immich PostgreSQL" \
-      org.opencontainers.image.description="PostgreSQL 14 with pgvector/pgvecto.rs extensions for Immich." \
-      org.opencontainers.image.source="https://github.com/daemonless/immich-postgres" \
-      org.opencontainers.image.url="https://immich.app/" \
+LABEL org.opencontainers.image.title="{{ title }}" \
+      org.opencontainers.image.description="{{ description }}" \
+      org.opencontainers.image.source="{{ repo_url }}" \
+      org.opencontainers.image.url="{{ web_url }}" \
       org.opencontainers.image.licenses="PostgreSQL" \
       org.opencontainers.image.vendor="daemonless" \
       org.opencontainers.image.authors="daemonless" \
-      io.daemonless.category="Databases" \
-      io.daemonless.port="5432" \
-      io.daemonless.volumes="/var/lib/postgresql/data" \
+      io.daemonless.category="{{ category }}" \
+{%- if ports %}
+      io.daemonless.port="{{ ports[0].port }}" \
+{%- endif %}
+{%- if volumes %}
+      io.daemonless.volumes="{{ volumes | map(attribute='path') | join(',') }}" \
+{%- endif %}
+{%- if mlock %}
+      org.freebsd.jail.allow.mlock="required" \
+{%- endif %}
       io.daemonless.arch="${FREEBSD_ARCH}" \
       io.daemonless.vectorchord-version="${VECTORCHORD_VERSION}" \
       io.daemonless.healthcheck-cmd="${HEALTHCHECK_ENDPOINT}" \
@@ -78,7 +89,11 @@ ENV POSTGRES_DB=immich \
     POSTGRES_SHARED_PRELOAD_LIBRARIES=vchord
 
 # --- Expose (Injected by Generator) ---
-EXPOSE 5432
+{%- if ports %}
+EXPOSE {{ ports | map(attribute='port') | join(' ') }}
+{%- endif %}
 
 # --- Volumes (Injected by Generator) ---
-VOLUME /var/lib/postgresql/data
+{%- if volumes %}
+VOLUME {{ volumes | map(attribute='path') | join(' ') }}
+{%- endif %}

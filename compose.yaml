@@ -1,0 +1,41 @@
+name: immich-postgres
+
+x-daemonless:
+  title: "Immich PostgreSQL"
+  icon: ":simple-postgresql:"
+  category: "Databases"
+  description: "PostgreSQL 14 with pgvector/pgvecto.rs extensions for Immich."
+  upstream_url: "https://github.com/immich-app/immich"
+  web_url: "https://immich.app/"
+  freshports_url: "https://www.freshports.org/databases/postgresql14-server/"
+  user: "postgres"
+  mlock: false
+  upstream_binary: true
+  
+  docs:
+    env:
+      POSTGRES_USER: "Database superuser (default: postgres)"
+      POSTGRES_PASSWORD: "Database password (default: postgres)"
+      POSTGRES_DB: "Database name (default: immich)"
+      POSTGRES_INITDB_ARGS: "Additional initdb arguments"
+    volumes:
+      /var/lib/postgresql/data: "Database data directory"
+    ports:
+      5432: "PostgreSQL Port"
+
+services:
+  immich-postgres:
+    image: ghcr.io/daemonless/immich-postgres:latest
+    container_name: immich-postgres
+    restart: unless-stopped
+    
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=immich
+
+    volumes:
+      - /path/to/containers/immich/postgres:/var/lib/postgresql/data
+
+    ports:
+      - "5432:5432"
