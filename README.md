@@ -23,7 +23,7 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=immich
     volumes:
-      - /path/to/containers/immich-postgres/var/lib/postgresql/data:/var/lib/postgresql/data
+      - /path/to/containers/immich/postgres:/var/lib/postgresql/data
     ports:
       - 5432:5432
     restart: unless-stopped
@@ -37,7 +37,7 @@ podman run -d --name immich-postgres \
   -e POSTGRES_USER=postgres \
   -e POSTGRES_PASSWORD=postgres \
   -e POSTGRES_DB=immich \
-  -v /path/to/containers/immich-postgres/var/lib/postgresql/data:/var/lib/postgresql/data \ 
+  -v /path/to/containers/immich/postgres:/var/lib/postgresql/data \ 
   ghcr.io/daemonless/immich-postgres:latest
 ```
 Access at: `http://localhost:5432`
@@ -58,11 +58,10 @@ Access at: `http://localhost:5432`
     ports:
       - "5432:5432"
     volumes:
-      - "/path/to/containers/immich-postgres/var/lib/postgresql/data:/var/lib/postgresql/data"
+      - "/path/to/containers/immich/postgres:/var/lib/postgresql/data"
 ```
 
 ## Configuration
-
 ### Environment Variables
 
 | Variable | Default | Description |
@@ -70,13 +69,11 @@ Access at: `http://localhost:5432`
 | `POSTGRES_USER` | `postgres` | Database superuser (default: postgres) |
 | `POSTGRES_PASSWORD` | `postgres` | Database password (default: postgres) |
 | `POSTGRES_DB` | `immich` | Database name (default: immich) |
-
 ### Volumes
 
 | Path | Description |
 |------|-------------|
 | `/var/lib/postgresql/data` | Database data directory |
-
 ### Ports
 
 | Port | Protocol | Description |
