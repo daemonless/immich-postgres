@@ -83,6 +83,8 @@ Access at: `http://localhost:5432`
 |------|----------|-------------|
 | `5432` | TCP | PostgreSQL Port |
 
+This image is part of the [Immich Stack](https://daemonless.io/images/immich).
+
 ## Notes
 
 - **User:** `postgres` (UID/GID set via PUID/PGID)
