@@ -69,6 +69,10 @@ COPY --from=builder /usr/local/share/postgresql/extension/vchord* /usr/local/sha
 RUN chmod 644 /usr/local/share/postgresql/extension/vchord* && \
     chmod 755 /usr/local/lib/postgresql/vchord.so
 
+# Extract version
+RUN mkdir -p /app && \
+    pkg query '%v' postgresql${PG_VERSION}-server | sed 's/_.*$//' > /app/version
+
 # Copy init scripts for extensions
 COPY docker-entrypoint-initdb.d/ /docker-entrypoint-initdb.d/
 RUN chmod 644 /docker-entrypoint-initdb.d/*
