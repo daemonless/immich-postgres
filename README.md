@@ -11,6 +11,7 @@ PostgreSQL 14 with pgvector/pgvecto.rs extensions for Immich.
 |---|---|
 | **Port** | 5432 |
 | **Registry** | `ghcr.io/daemonless/immich-postgres` |
+| **Docs** | [daemonless.io/images/immich-postgres](https://daemonless.io/images/immich-postgres/) |
 | **Source** | [https://github.com/immich-app/immich](https://github.com/immich-app/immich) |
 | **Website** | [https://immich.app/](https://immich.app/) |
 
