@@ -29,7 +29,10 @@ services:
     image: ghcr.io/daemonless/immich-postgres:latest
     container_name: immich-postgres
     restart: unless-stopped
-    
+
+    annotations:
+      org.freebsd.jail.allow.sysvipc: "true"
+
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
