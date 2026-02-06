@@ -1,11 +1,12 @@
 {
   "image": "immich-postgres",
-  "generated": "2026-02-02T13:41:49Z",
+  "generated": "2026-02-06T00:06:56Z",
   "tags": {
     "latest": {
+      "arch": "amd64",
       "app_version": "14.20",
       "source": "upstream-binary",
-      "generated": "2026-02-02T13:32:59Z",
+      "generated": "2026-02-06T00:06:38Z",
       "packages": {
         "freebsd": [
           {
@@ -226,17 +227,22 @@
           }
         ],
         "dotnet": [],
-        "python": [],
+        "python": [
+          {
+            "name": "example",
+            "version": "21.12"
+          }
+        ],
         "node": [],
         "go": []
       },
       "summary": {
         "freebsd": 54,
         "dotnet": 0,
-        "python": 0,
+        "python": 1,
         "node": 0,
         "go": 0,
-        "total": 54
+        "total": 55
       }
     }
   }
