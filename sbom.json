@@ -1,12 +1,12 @@
 {
   "image": "immich-postgres",
-  "generated": "2026-02-13T12:15:42Z",
+  "generated": "2026-02-14T14:40:57Z",
   "tags": {
     "latest": {
       "arch": "amd64",
       "app_version": "14.20",
       "source": "upstream",
-      "generated": "2026-02-13T12:13:29Z",
+      "generated": "2026-02-14T14:33:08Z",
       "packages": {
         "freebsd": [
           {
@@ -15,7 +15,7 @@
           },
           {
             "name": "FreeBSD-blocklist",
-            "version": "15.0"
+            "version": "15.0p3"
           },
           {
             "name": "FreeBSD-bzip2-lib",
@@ -203,7 +203,7 @@
           },
           {
             "name": "python311",
-            "version": "3.11.14_1"
+            "version": "3.11.14_2"
           },
           {
             "name": "readline",
