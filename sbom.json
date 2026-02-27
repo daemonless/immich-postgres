@@ -1,12 +1,12 @@
 {
   "image": "immich-postgres",
-  "generated": "2026-02-16T18:21:41Z",
+  "generated": "2026-02-27T22:22:15Z",
   "tags": {
     "latest": {
       "arch": "amd64",
       "app_version": "14.20_1",
       "source": "upstream",
-      "generated": "2026-02-16T18:21:25Z",
+      "generated": "2026-02-27T22:21:59Z",
       "packages": {
         "freebsd": [
           {
