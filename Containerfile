@@ -4,16 +4,13 @@
 # Source: Containerfile.j2
 # --------------------------------------------------------------------------
 
-ARG BASE_VERSION=15
 ARG PG_VERSION=14
 
 # Builder stage - compile extensions
-FROM ghcr.io/daemonless/base:${BASE_VERSION} AS builder
-ARG PG_VERSION
+FROM ghcr.io/daemonless/postgres:${PG_VERSION} AS builder
 
 # Build dependencies
 RUN pkg update && pkg install -y \
-    postgresql${PG_VERSION}-server postgresql${PG_VERSION}-contrib \
     FreeBSD-bmake FreeBSD-clibs-dev FreeBSD-clang FreeBSD-clang-dev FreeBSD-toolchain \
     FreeBSD-libexecinfo FreeBSD-libexecinfo-dev FreeBSD-runtime-dev FreeBSD-utilities-dev \
     rust gmake git-lite pkgconf \
@@ -51,7 +48,7 @@ ENV HEALTHCHECK_CMD="${HEALTHCHECK_ENDPOINT}"
 
 # --- Metadata (Injected by Generator) ---
 LABEL org.opencontainers.image.title="Immich PostgreSQL" \
-      org.opencontainers.image.description="PostgreSQL 14 with pgvector/pgvecto.rs extensions for Immich." \
+      org.opencontainers.image.description="PostgreSQL 14 with pgvector and vectorchord extensions required by Immich for vector similarity search." \
       org.opencontainers.image.source="https://github.com/daemonless/immich-postgres" \
       org.opencontainers.image.url="https://immich.app/" \
       org.opencontainers.image.licenses="PostgreSQL" \

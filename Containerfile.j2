@@ -1,13 +1,10 @@
-ARG BASE_VERSION=15
 ARG PG_VERSION=14
 
 # Builder stage - compile extensions
-FROM ghcr.io/daemonless/base:${BASE_VERSION} AS builder
-ARG PG_VERSION
+FROM ghcr.io/daemonless/postgres:${PG_VERSION} AS builder
 
 # Build dependencies
 RUN pkg update && pkg install -y \
-    postgresql${PG_VERSION}-server postgresql${PG_VERSION}-contrib \
     FreeBSD-bmake FreeBSD-clibs-dev FreeBSD-clang FreeBSD-clang-dev FreeBSD-toolchain \
     FreeBSD-libexecinfo FreeBSD-libexecinfo-dev FreeBSD-runtime-dev FreeBSD-utilities-dev \
     rust gmake git-lite pkgconf \

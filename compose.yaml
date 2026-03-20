@@ -4,14 +4,30 @@ x-daemonless:
   title: "Immich PostgreSQL"
   icon: ":simple-postgresql:"
   category: "Databases"
-  description: "PostgreSQL 14 with pgvector/pgvecto.rs extensions for Immich."
+  description: "PostgreSQL 14 with pgvector and vectorchord extensions required by Immich for vector similarity search."
   upstream_url: "https://github.com/immich-app/immich"
   web_url: "https://immich.app/"
   freshports_url: "https://www.freshports.org/databases/postgresql14-server/"
   user: "postgres"
   mlock: false
   upstream_binary: true
-  notes: "This image is part of the [Immich Stack](https://daemonless.io/images/immich)."
+  appjail: true
+  appjail:
+    makejail:
+      options:
+        - "template: !ENV '${PWD}/immich-postgres.conf'"
+  notes: |
+    This image is part of the [Immich Stack](https://daemonless.io/images/immich).
+
+    PostgreSQL requires `allow.sysvipc` for shared memory. Create `immich-postgres.conf` alongside `appjail-director.yml`:
+
+    ```
+    exec.start: "/bin/sh /etc/rc"
+    exec.stop: "/bin/sh /etc/rc.shutdown jail"
+    mount.devfs
+    persist
+    allow.sysvipc
+    ```
   
   docs:
     env:

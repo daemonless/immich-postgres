@@ -5,15 +5,27 @@ Source: dbuild templates
 
 # Immich PostgreSQL
 
-PostgreSQL 14 with pgvector/pgvecto.rs extensions for Immich.
+[![Build Status](https://img.shields.io/github/actions/workflow/status/daemonless/immich-postgres/build.yaml?style=flat-square&label=Build&color=green)](https://github.com/daemonless/immich-postgres/actions)
+[![Last Commit](https://img.shields.io/github/last-commit/daemonless/immich-postgres?style=flat-square&label=Last+Commit&color=blue)](https://github.com/daemonless/immich-postgres/commits)
+
+PostgreSQL 14 with pgvector and vectorchord extensions required by Immich for vector similarity search.
 
 | | |
 |---|---|
 | **Port** | 5432 |
 | **Registry** | `ghcr.io/daemonless/immich-postgres` |
-| **Docs** | [daemonless.io/images/immich-postgres](https://daemonless.io/images/immich-postgres/) |
 | **Source** | [https://github.com/immich-app/immich](https://github.com/immich-app/immich) |
 | **Website** | [https://immich.app/](https://immich.app/) |
+
+## Version Tags
+
+| Tag | Description | Best For |
+| :--- | :--- | :--- |
+| `latest` | **Upstream Binary**. Built from official release. | Most users. Matches Linux Docker behavior. |
+
+## Prerequisites
+
+Before deploying, ensure your host environment is ready. See the [Quick Start Guide](https://daemonless.io/guides/quick-start) for host setup instructions.
 
 ## Deployment
 
@@ -29,10 +41,58 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=immich
     volumes:
-      - /path/to/containers/immich-postgres/var/lib/postgresql/data:/var/lib/postgresql/data
+      - "/path/to/containers/immich-postgres/var/lib/postgresql/data:/var/lib/postgresql/data"
     ports:
       - 5432:5432
+    annotations:
+      org.freebsd.jail.allow.sysvipc: "true"
     restart: unless-stopped
+```
+
+### AppJail Director
+
+**.env**:
+
+```
+DIRECTOR_PROJECT=immich-postgres
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_DB=immich
+```
+
+**appjail-director.yml**:
+
+```yaml
+options:
+  - virtualnet: ':<random> default'
+  - nat:
+services:
+  immich-postgres:
+    name: immich_postgres
+    options:
+      - container: 'boot args:--pull'
+      - template: !ENV '${PWD}/immich-postgres.conf'
+    oci:
+      user: root
+      environment:
+        - POSTGRES_USER: !ENV '${POSTGRES_USER}'
+        - POSTGRES_PASSWORD: !ENV '${POSTGRES_PASSWORD}'
+        - POSTGRES_DB: !ENV '${POSTGRES_DB}'
+    volumes:
+      - immich-postgres_var_lib_postgresql_data: /var/lib/postgresql/data
+volumes:
+  immich-postgres_var_lib_postgresql_data:
+    device: '/path/to/containers/immich-postgres/var/lib/postgresql/data'
+```
+
+**Makejail**:
+
+```
+ARG tag=latest
+
+OPTION overwrite=force
+OPTION from=ghcr.io/daemonless/immich-postgres:${tag}
+SET allow.sysvipc=1
 ```
 
 ### Podman CLI
@@ -47,7 +107,6 @@ podman run -d --name immich-postgres \
   -v /path/to/containers/immich-postgres/var/lib/postgresql/data:/var/lib/postgresql/data \
   ghcr.io/daemonless/immich-postgres:latest
 ```
-Access at: `http://localhost:5432`
 
 ### Ansible
 
@@ -66,9 +125,14 @@ Access at: `http://localhost:5432`
       - "5432:5432"
     volumes:
       - "/path/to/containers/immich-postgres/var/lib/postgresql/data:/var/lib/postgresql/data"
+    annotation:
+      org.freebsd.jail.allow.sysvipc: "true"
 ```
 
-## Configuration
+Access at: `http://localhost:5432`
+
+## Parameters
+
 ### Environment Variables
 
 | Variable | Default | Description |
@@ -76,11 +140,13 @@ Access at: `http://localhost:5432`
 | `POSTGRES_USER` | `postgres` | Database superuser (default: postgres) |
 | `POSTGRES_PASSWORD` | `postgres` | Database password (default: postgres) |
 | `POSTGRES_DB` | `immich` | Database name (default: immich) |
+
 ### Volumes
 
 | Path | Description |
 |------|-------------|
 | `/var/lib/postgresql/data` | Database data directory |
+
 ### Ports
 
 | Port | Protocol | Description |
@@ -89,8 +155,21 @@ Access at: `http://localhost:5432`
 
 This image is part of the [Immich Stack](https://daemonless.io/images/immich).
 
-## Notes
+PostgreSQL requires `allow.sysvipc` for shared memory. Create `immich-postgres.conf` alongside `appjail-director.yml`:
 
-- **Architectures:** amd64
-- **User:** `postgres` (UID/GID set via PUID/PGID)
-- **Base:** Built on `ghcr.io/daemonless/base` (FreeBSD)
+```
+exec.start: "/bin/sh /etc/rc"
+exec.stop: "/bin/sh /etc/rc.shutdown jail"
+mount.devfs
+persist
+allow.sysvipc
+```
+
+
+**Architectures:** amd64
+**User:** `postgres` (UID/GID via PUID/PGID, defaults to 1000:1000)
+**Base:** FreeBSD 15.0
+
+---
+
+Need help? Join our [Discord](https://discord.gg/Kb9tkhecZT) community.
