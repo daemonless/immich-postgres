@@ -1,12 +1,12 @@
 {
   "image": "immich-postgres",
-  "generated": "2026-03-08T22:24:05Z",
+  "generated": "2026-03-20T00:21:59Z",
   "tags": {
     "latest": {
       "arch": "amd64",
-      "app_version": "14.20_1",
+      "app_version": "14.22",
       "source": "upstream",
-      "generated": "2026-03-08T22:23:48Z",
+      "generated": "2026-03-20T00:21:41Z",
       "packages": {
         "freebsd": [
           {
@@ -163,7 +163,7 @@
           },
           {
             "name": "libxml2",
-            "version": "2.15.1"
+            "version": "2.15.2"
           },
           {
             "name": "llvm19",
@@ -191,19 +191,19 @@
           },
           {
             "name": "postgresql14-client",
-            "version": "14.20_2"
+            "version": "14.22"
           },
           {
             "name": "postgresql14-contrib",
-            "version": "14.20_1"
+            "version": "14.22"
           },
           {
             "name": "postgresql14-server",
-            "version": "14.20_1"
+            "version": "14.22"
           },
           {
             "name": "python311",
-            "version": "3.11.14_2"
+            "version": "3.11.15"
           },
           {
             "name": "readline",
