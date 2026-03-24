@@ -1,1 +1,16 @@
 icon: ':simple-postgresql:'
+
+cit:
+  mode: port
+  port: 5432
+
+build:
+  variants:
+    - tag: "14"
+      args:
+        PG_VERSION: "14"
+      aliases: ["latest"]
+      default: true
+    - tag: "18"
+      args:
+        PG_VERSION: "18"

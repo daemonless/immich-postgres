@@ -18,12 +18,12 @@ RUN fetch -qo /tmp/ports.tar.zst \
         ports/databases/pgvector ports/Mk ports/Templates ports/Keywords && \
     rm /tmp/ports.tar.zst
 
-# Build pgvector for PostgreSQL 14
+# Build pgvector
 WORKDIR /usr/ports/databases/pgvector
 RUN make DEFAULT_VERSIONS+=pgsql=${PG_VERSION} BATCH=yes install clean
 
 # Build VectorChord from source
-ARG VECTORCHORD_VERSION=0.4.3
+ARG VECTORCHORD_VERSION=0.5.3
 RUN fetch -qo /tmp/vectorchord.tar.gz \
     "https://github.com/tensorchord/VectorChord/archive/refs/tags/${VECTORCHORD_VERSION}.tar.gz" && \
     tar -xzf /tmp/vectorchord.tar.gz -C /tmp && \

@@ -24,12 +24,12 @@ RUN fetch -qo /tmp/ports.tar.zst \
         ports/databases/pgvector ports/Mk ports/Templates ports/Keywords && \
     rm /tmp/ports.tar.zst
 
-# Build pgvector for PostgreSQL 14
+# Build pgvector
 WORKDIR /usr/ports/databases/pgvector
 RUN make DEFAULT_VERSIONS+=pgsql=${PG_VERSION} BATCH=yes install clean
 
 # Build VectorChord from source
-ARG VECTORCHORD_VERSION=0.4.3
+ARG VECTORCHORD_VERSION=0.5.3
 RUN fetch -qo /tmp/vectorchord.tar.gz \
     "https://github.com/tensorchord/VectorChord/archive/refs/tags/${VECTORCHORD_VERSION}.tar.gz" && \
     tar -xzf /tmp/vectorchord.tar.gz -C /tmp && \
@@ -48,7 +48,7 @@ ENV HEALTHCHECK_CMD="${HEALTHCHECK_ENDPOINT}"
 
 # --- Metadata (Injected by Generator) ---
 LABEL org.opencontainers.image.title="Immich PostgreSQL" \
-      org.opencontainers.image.description="PostgreSQL 14 with pgvector and vectorchord extensions required by Immich for vector similarity search." \
+      org.opencontainers.image.description="PostgreSQL with pgvector and vectorchord extensions required by Immich for vector similarity search. Defaults to PostgreSQL 14 (:latest), PostgreSQL 18 available as :18." \
       org.opencontainers.image.source="https://github.com/daemonless/immich-postgres" \
       org.opencontainers.image.url="https://immich.app/" \
       org.opencontainers.image.licenses="PostgreSQL" \

@@ -4,7 +4,7 @@ x-daemonless:
   title: "Immich PostgreSQL"
   icon: ":simple-postgresql:"
   category: "Databases"
-  description: "PostgreSQL 14 with pgvector and vectorchord extensions required by Immich for vector similarity search."
+  description: "PostgreSQL with pgvector and vectorchord extensions required by Immich for vector similarity search. Defaults to PostgreSQL 14 (:latest), PostgreSQL 18 available as :18."
   upstream_url: "https://github.com/immich-app/immich"
   web_url: "https://immich.app/"
   freshports_url: "https://www.freshports.org/databases/postgresql14-server/"
@@ -18,6 +18,11 @@ x-daemonless:
         - "template: !ENV '${PWD}/immich-postgres.conf'"
   notes: |
     This image is part of the [Immich Stack](https://daemonless.io/images/immich).
+
+    **PostgreSQL version:** `:latest` and `:14` use PostgreSQL 14. `:18` uses PostgreSQL 18.
+    New installations should consider `:18`. If you are migrating an existing Immich instance,
+    stay on `:14` — PostgreSQL major version upgrades require a full `pg_dumpall` and restore.
+    The default `:latest` tag will follow whatever version Immich recommends upstream.
 
     PostgreSQL requires `allow.sysvipc` for shared memory. Create `immich-postgres.conf` alongside `appjail-director.yml`:
 
