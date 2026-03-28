@@ -10,6 +10,7 @@ Source: dbuild templates
 
 PostgreSQL with pgvector and vectorchord extensions required by Immich for vector similarity search. Defaults to PostgreSQL 14 (:latest), PostgreSQL 18 available as :18.
 
+
 | | |
 |---|---|
 | **Port** | 5432 |
