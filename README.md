@@ -7,9 +7,9 @@ Source: dbuild templates
 
 [![Build Status](https://img.shields.io/github/actions/workflow/status/daemonless/immich-postgres/build.yaml?style=flat-square&label=Build&color=green)](https://github.com/daemonless/immich-postgres/actions)
 [![Last Commit](https://img.shields.io/github/last-commit/daemonless/immich-postgres?style=flat-square&label=Last+Commit&color=blue)](https://github.com/daemonless/immich-postgres/commits)
+[![sysvipc Required](https://img.shields.io/badge/sysvipc-required-orange?style=flat-square&logo=freebsd&logoColor=white)](https://daemonless.io/guides/ocijail-patch/)
 
 PostgreSQL with pgvector and vectorchord extensions required by Immich for vector similarity search. Defaults to PostgreSQL 14 (:latest), PostgreSQL 18 available as :18.
-
 
 | | |
 |---|---|
@@ -130,8 +130,6 @@ podman run -d --name immich-postgres \
     annotation:
       org.freebsd.jail.allow.sysvipc: "true"
 ```
-
-Access at: `http://localhost:5432`
 
 ## Parameters
 

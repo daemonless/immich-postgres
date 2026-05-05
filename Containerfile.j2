@@ -1,7 +1,9 @@
 ARG PG_VERSION=14
+ARG VECTORCHORD_VERSION=0.5.3
 
 # Builder stage - compile extensions
 FROM ghcr.io/daemonless/postgres:${PG_VERSION} AS builder
+ARG VECTORCHORD_VERSION
 
 # Build dependencies
 RUN pkg update && pkg install -y \
@@ -10,20 +12,7 @@ RUN pkg update && pkg install -y \
     rust gmake git-lite pkgconf \
     && pkg clean -ay
 
-# Fetch minimal ports tree for pgvector
-RUN fetch -qo /tmp/ports.tar.zst \
-    "https://download.freebsd.org/ports/ports/ports.tar.zst" && \
-    mkdir -p /usr/ports && \
-    tar -xf /tmp/ports.tar.zst -C /usr/ports --strip-components=1 \
-        ports/databases/pgvector ports/Mk ports/Templates ports/Keywords && \
-    rm /tmp/ports.tar.zst
-
-# Build pgvector
-WORKDIR /usr/ports/databases/pgvector
-RUN make DEFAULT_VERSIONS+=pgsql=${PG_VERSION} BATCH=yes install clean
-
 # Build VectorChord from source
-ARG VECTORCHORD_VERSION=0.5.3
 RUN fetch -qo /tmp/vectorchord.tar.gz \
     "https://github.com/tensorchord/VectorChord/archive/refs/tags/${VECTORCHORD_VERSION}.tar.gz" && \
     tar -xzf /tmp/vectorchord.tar.gz -C /tmp && \
@@ -35,7 +24,7 @@ RUN fetch -qo /tmp/vectorchord.tar.gz \
 FROM ghcr.io/daemonless/postgres:${PG_VERSION}
 
 ARG FREEBSD_ARCH=amd64
-ARG VECTORCHORD_VERSION=0.4.3
+ARG VECTORCHORD_VERSION
 {%- if ports %}
 ARG HEALTHCHECK_ENDPOINT="pg_isready -U postgres"
 {%- else %}
@@ -67,9 +56,7 @@ LABEL org.opencontainers.image.title="{{ title }}" \
       io.daemonless.healthcheck-cmd="${HEALTHCHECK_ENDPOINT}" \
       org.freebsd.jail.allow.sysvipc="required"
 
-# Copy built extensions from builder
-COPY --from=builder /usr/local/lib/postgresql/vector.so /usr/local/lib/postgresql/
-COPY --from=builder /usr/local/share/postgresql/extension/vector* /usr/local/share/postgresql/extension/
+# Copy VectorChord extension from builder (pgvector already in base image)
 COPY --from=builder /usr/local/lib/postgresql/vchord.so /usr/local/lib/postgresql/
 COPY --from=builder /usr/local/share/postgresql/extension/vchord* /usr/local/share/postgresql/extension/
 
