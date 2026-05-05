@@ -1,11 +1,11 @@
 {
-  "generated": "2026-05-03T11:22:35Z",
+  "generated": "2026-05-05T22:35:37Z",
   "image": "immich-postgres",
   "tags": {
     "14": {
       "app_version": "14.22",
       "arch": "amd64",
-      "generated": "2026-05-03T11:21:18Z",
+      "generated": "2026-05-05T22:33:56Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -202,6 +202,10 @@
             "version": "14.22"
           },
           {
+            "name": "postgresql14-pgvector",
+            "version": "0.8.2"
+          },
+          {
             "name": "postgresql14-server",
             "version": "14.22"
           },
@@ -242,7 +246,7 @@
       "source": "upstream",
       "summary": {
         "dotnet": 0,
-        "freebsd": 54,
+        "freebsd": 55,
         "go": 0,
         "java": 0,
         "node": 0,
@@ -250,13 +254,13 @@
         "python": 1,
         "ruby": 0,
         "rust": 0,
-        "total": 55
+        "total": 56
       }
     },
     "18": {
       "app_version": "18.3",
       "arch": "amd64",
-      "generated": "2026-05-03T11:20:28Z",
+      "generated": "2026-05-05T22:34:23Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -453,6 +457,10 @@
             "version": "18.3"
           },
           {
+            "name": "postgresql18-pgvector",
+            "version": "0.8.2"
+          },
+          {
             "name": "postgresql18-server",
             "version": "18.3"
           },
@@ -493,7 +501,7 @@
       "source": "upstream",
       "summary": {
         "dotnet": 0,
-        "freebsd": 54,
+        "freebsd": 55,
         "go": 0,
         "java": 0,
         "node": 0,
@@ -501,7 +509,7 @@
         "python": 1,
         "ruby": 0,
         "rust": 0,
-        "total": 55
+        "total": 56
       }
     }
   }
