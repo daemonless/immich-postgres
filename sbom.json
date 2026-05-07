@@ -1,11 +1,11 @@
 {
-  "generated": "2026-05-05T22:35:37Z",
+  "generated": "2026-05-07T07:21:07Z",
   "image": "immich-postgres",
   "tags": {
     "14": {
       "app_version": "14.22",
       "arch": "amd64",
-      "generated": "2026-05-05T22:33:56Z",
+      "generated": "2026-05-07T07:19:57Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -99,7 +99,7 @@
           },
           {
             "name": "FreeBSD-runtime",
-            "version": "15.0p6"
+            "version": "15.0p8"
           },
           {
             "name": "FreeBSD-tcpd",
@@ -127,7 +127,7 @@
           },
           {
             "name": "FreeBSD-zoneinfo",
-            "version": "15.0"
+            "version": "15.0p7"
           },
           {
             "name": "ca_root_nss",
@@ -260,7 +260,7 @@
     "18": {
       "app_version": "18.3",
       "arch": "amd64",
-      "generated": "2026-05-05T22:34:23Z",
+      "generated": "2026-05-07T07:15:36Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -354,7 +354,7 @@
           },
           {
             "name": "FreeBSD-runtime",
-            "version": "15.0p6"
+            "version": "15.0p8"
           },
           {
             "name": "FreeBSD-tcpd",
@@ -382,7 +382,7 @@
           },
           {
             "name": "FreeBSD-zoneinfo",
-            "version": "15.0"
+            "version": "15.0p7"
           },
           {
             "name": "ca_root_nss",
