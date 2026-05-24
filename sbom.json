@@ -1,11 +1,11 @@
 {
-  "generated": "2026-05-07T07:21:07Z",
+  "generated": "2026-05-24T21:47:58Z",
   "image": "immich-postgres",
   "tags": {
     "14": {
-      "app_version": "14.22",
+      "app_version": "14.23",
       "arch": "amd64",
-      "generated": "2026-05-07T07:19:57Z",
+      "generated": "2026-05-24T21:46:45Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -131,7 +131,7 @@
           },
           {
             "name": "ca_root_nss",
-            "version": "3.117_2"
+            "version": "3.123.1"
           },
           {
             "name": "execline",
@@ -195,11 +195,11 @@
           },
           {
             "name": "postgresql14-client",
-            "version": "14.22"
+            "version": "14.23"
           },
           {
             "name": "postgresql14-contrib",
-            "version": "14.22"
+            "version": "14.23"
           },
           {
             "name": "postgresql14-pgvector",
@@ -207,7 +207,7 @@
           },
           {
             "name": "postgresql14-server",
-            "version": "14.22"
+            "version": "14.23"
           },
           {
             "name": "python311",
@@ -258,9 +258,9 @@
       }
     },
     "18": {
-      "app_version": "18.3",
+      "app_version": "18.4",
       "arch": "amd64",
-      "generated": "2026-05-07T07:15:36Z",
+      "generated": "2026-05-24T21:45:57Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -386,7 +386,7 @@
           },
           {
             "name": "ca_root_nss",
-            "version": "3.117_2"
+            "version": "3.123.1"
           },
           {
             "name": "execline",
@@ -450,11 +450,11 @@
           },
           {
             "name": "postgresql18-client",
-            "version": "18.3"
+            "version": "18.4"
           },
           {
             "name": "postgresql18-contrib",
-            "version": "18.3"
+            "version": "18.4"
           },
           {
             "name": "postgresql18-pgvector",
@@ -462,7 +462,7 @@
           },
           {
             "name": "postgresql18-server",
-            "version": "18.3"
+            "version": "18.4"
           },
           {
             "name": "python311",
