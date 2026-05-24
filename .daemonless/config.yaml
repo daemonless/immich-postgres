@@ -7,13 +7,14 @@ cit:
 build:
   auto_version: true
   variants:
-    - tag: "14"
+    - tag: "14-pkg"
       pkg_name: postgresql14-server
       args:
         PG_VERSION: "14"
-      aliases: ["latest"]
+      aliases: ["14", "latest"]
       default: true
-    - tag: "18"
+    - tag: "18-pkg"
       pkg_name: postgresql18-server
       args:
         PG_VERSION: "18"
+      aliases: ["18"]

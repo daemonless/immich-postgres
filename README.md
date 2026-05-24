@@ -22,8 +22,8 @@ PostgreSQL with pgvector and vectorchord extensions required by Immich for vecto
 
 | Tag | Description | Best For |
 | :--- | :--- | :--- |
-| `14` / `latest` | **Upstream Binary**. Built from official release. | Most users. Matches Linux Docker behavior. |
-| `18` | **Upstream Binary**. Built from official release. | Alternative build. |
+| `14` / `14-pkg` / `latest` | **Upstream Binary**. Built from official release. | Most users. Matches Linux Docker behavior. |
+| `18` / `18-pkg` | **Upstream Binary**. Built from official release. | Alternative build. |
 
 ## Prerequisites
 
