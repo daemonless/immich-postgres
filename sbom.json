@@ -1,11 +1,11 @@
 {
-  "generated": "2026-07-10T22:34:26Z",
+  "generated": "2026-07-19T09:25:26Z",
   "image": "immich-postgres",
   "tags": {
     "14-pkg": {
       "app_version": "14.23",
       "arch": "amd64",
-      "generated": "2026-07-10T22:33:00Z",
+      "generated": "2026-07-19T09:24:04Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -74,6 +74,10 @@
             "version": "15.1"
           },
           {
+            "name": "FreeBSD-locales",
+            "version": "15.1"
+          },
+          {
             "name": "FreeBSD-mtree",
             "version": "15.1"
           },
@@ -139,7 +143,7 @@
           },
           {
             "name": "ca_root_nss",
-            "version": "3.124"
+            "version": "3.125"
           },
           {
             "name": "execline",
@@ -147,11 +151,11 @@
           },
           {
             "name": "expat",
-            "version": "2.8.1"
+            "version": "2.8.2"
           },
           {
             "name": "gettext-runtime",
-            "version": "1.0"
+            "version": "1.0_1"
           },
           {
             "name": "icu",
@@ -163,15 +167,15 @@
           },
           {
             "name": "jq",
-            "version": "1.8.1"
+            "version": "1.8.2"
           },
           {
             "name": "libedit",
-            "version": "3.1.20251016_1,1"
+            "version": "3.1.20260512,1"
           },
           {
             "name": "libffi",
-            "version": "3.5.1"
+            "version": "3.6.0"
           },
           {
             "name": "liblz4",
@@ -179,11 +183,11 @@
           },
           {
             "name": "libxml2",
-            "version": "2.15.2"
+            "version": "2.15.3"
           },
           {
             "name": "llvm19",
-            "version": "19.1.7_1"
+            "version": "19.1.7_4"
           },
           {
             "name": "lua53",
@@ -203,7 +207,7 @@
           },
           {
             "name": "pkg",
-            "version": "2.6.2_1"
+            "version": "2.7.5"
           },
           {
             "name": "postgresql14-client",
@@ -222,8 +226,8 @@
             "version": "14.23"
           },
           {
-            "name": "python311",
-            "version": "3.11.15_4"
+            "name": "python312",
+            "version": "3.12.13_3"
           },
           {
             "name": "readline",
@@ -239,7 +243,7 @@
           },
           {
             "name": "zstd",
-            "version": "1.5.7_1"
+            "version": "1.5.7_2"
           }
         ],
         "go": [],
@@ -258,7 +262,7 @@
       "source": "upstream",
       "summary": {
         "dotnet": 0,
-        "freebsd": 58,
+        "freebsd": 59,
         "go": 0,
         "java": 0,
         "node": 0,
@@ -266,13 +270,13 @@
         "python": 1,
         "ruby": 0,
         "rust": 0,
-        "total": 59
+        "total": 60
       }
     },
     "18-pkg": {
       "app_version": "18.4",
       "arch": "amd64",
-      "generated": "2026-07-10T22:33:14Z",
+      "generated": "2026-07-19T09:24:13Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -341,6 +345,10 @@
             "version": "15.1"
           },
           {
+            "name": "FreeBSD-locales",
+            "version": "15.1"
+          },
+          {
             "name": "FreeBSD-mtree",
             "version": "15.1"
           },
@@ -406,7 +414,7 @@
           },
           {
             "name": "ca_root_nss",
-            "version": "3.124"
+            "version": "3.125"
           },
           {
             "name": "execline",
@@ -414,11 +422,11 @@
           },
           {
             "name": "expat",
-            "version": "2.8.1"
+            "version": "2.8.2"
           },
           {
             "name": "gettext-runtime",
-            "version": "1.0"
+            "version": "1.0_1"
           },
           {
             "name": "icu",
@@ -430,15 +438,15 @@
           },
           {
             "name": "jq",
-            "version": "1.8.1"
+            "version": "1.8.2"
           },
           {
             "name": "libedit",
-            "version": "3.1.20251016_1,1"
+            "version": "3.1.20260512,1"
           },
           {
             "name": "libffi",
-            "version": "3.5.1"
+            "version": "3.6.0"
           },
           {
             "name": "liblz4",
@@ -446,11 +454,11 @@
           },
           {
             "name": "libxml2",
-            "version": "2.15.2"
+            "version": "2.15.3"
           },
           {
             "name": "llvm19",
-            "version": "19.1.7_1"
+            "version": "19.1.7_4"
           },
           {
             "name": "lua53",
@@ -470,7 +478,7 @@
           },
           {
             "name": "pkg",
-            "version": "2.6.2_1"
+            "version": "2.7.5"
           },
           {
             "name": "postgresql18-client",
@@ -489,8 +497,8 @@
             "version": "18.4"
           },
           {
-            "name": "python311",
-            "version": "3.11.15_4"
+            "name": "python312",
+            "version": "3.12.13_3"
           },
           {
             "name": "readline",
@@ -506,7 +514,7 @@
           },
           {
             "name": "zstd",
-            "version": "1.5.7_1"
+            "version": "1.5.7_2"
           }
         ],
         "go": [],
@@ -525,7 +533,7 @@
       "source": "upstream",
       "summary": {
         "dotnet": 0,
-        "freebsd": 58,
+        "freebsd": 59,
         "go": 0,
         "java": 0,
         "node": 0,
@@ -533,7 +541,7 @@
         "python": 1,
         "ruby": 0,
         "rust": 0,
-        "total": 59
+        "total": 60
       }
     }
   }
