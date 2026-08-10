@@ -11,6 +11,9 @@ Source: dbuild templates
 
 PostgreSQL with pgvector and vectorchord extensions required by Immich for vector similarity search. Defaults to PostgreSQL 14 (:latest), PostgreSQL 18 available as :18.
 
+> [!WARNING]
+> **Requires ocijail ≥ 0.6.0 (annotation support).** This image needs the jail permission **allow.sysvipc**, applied via OCI annotations. FreeBSD **quarterly ships ocijail 0.4.0, which has no annotation support** — the container starts but the permission is silently dropped, so the app can crash or misbehave at runtime. Point your pkg repos at the `latest` branch (ocijail ≥ 0.6.0), then run with the annotation flag below. See the [ocijail guide](https://daemonless.io/guides/ocijail-patch/).
+
 | | |
 |---|---|
 | **Port** | 5432 |
@@ -19,14 +22,12 @@ PostgreSQL with pgvector and vectorchord extensions required by Immich for vecto
 | **Website** | [https://immich.app/](https://immich.app/) |
 
 ## Version Tags
-
 | Tag | Description | Best For |
 | :--- | :--- | :--- |
-| `14` / `14-pkg` / `latest` | **Upstream Binary**. Built from official release. | Most users. Matches Linux Docker behavior. |
+| `14` / `14-pkg` / `latest` | **Upstream Binary**. Built from official release. | Most users — recommended. |
 | `18` / `18-pkg` | **Upstream Binary**. Built from official release. | Alternative build. |
 
 ## Prerequisites
-
 Before deploying, ensure your host environment is ready. See the [Quick Start Guide](https://daemonless.io/guides/quick-start) for host setup instructions.
 
 ## Deployment
@@ -36,35 +37,40 @@ Before deploying, ensure your host environment is ready. See the [Quick Start Gu
 ```yaml
 services:
   immich-postgres:
-    image: ghcr.io/daemonless/immich-postgres:latest
+    image: "ghcr.io/daemonless/immich-postgres:latest"
     container_name: immich-postgres
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=immich
+      - POSTGRES_USER=postgres  # Database superuser (default: postgres)
+      - POSTGRES_PASSWORD=postgres  # Database password (default: postgres)
+      - POSTGRES_DB=immich  # Database name (default: immich)
+      - POSTGRES_INITDB_ARGS=  # Additional initdb arguments
     volumes:
-      - "/path/to/containers/immich-postgres/var/lib/postgresql/data:/var/lib/postgresql/data"
+      - "/path/to/containers/immich-postgres:/var/lib/postgresql/data"
     ports:
-      - 5432:5432
+      - "5432:5432"
     annotations:
       org.freebsd.jail.allow.sysvipc: "true"
     restart: unless-stopped
 ```
 
 ### AppJail Director
-
 **.env**:
 
 ```
+# .env
+
 DIRECTOR_PROJECT=immich-postgres
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
 POSTGRES_DB=immich
+POSTGRES_INITDB_ARGS=
 ```
 
 **appjail-director.yml**:
 
 ```yaml
+# appjail-director.yml
+
 options:
   - virtualnet: ':<random> default'
   - nat:
@@ -73,6 +79,7 @@ services:
     name: immich_postgres
     options:
       - container: 'boot args:--pull'
+      - expose: '5432:5432 proto:tcp'
       - template: !ENV '${PWD}/immich-postgres.conf'
     oci:
       user: root
@@ -80,22 +87,26 @@ services:
         - POSTGRES_USER: !ENV '${POSTGRES_USER}'
         - POSTGRES_PASSWORD: !ENV '${POSTGRES_PASSWORD}'
         - POSTGRES_DB: !ENV '${POSTGRES_DB}'
+        - POSTGRES_INITDB_ARGS: !ENV '${POSTGRES_INITDB_ARGS}'
     volumes:
-      - immich-postgres_var_lib_postgresql_data: /var/lib/postgresql/data
+      - immich-postgres: /var/lib/postgresql/data
 volumes:
-  immich-postgres_var_lib_postgresql_data:
-    device: '/path/to/containers/immich-postgres/var/lib/postgresql/data'
+  immich-postgres:
+    device: '/path/to/containers/immich-postgres'
 ```
 
 **Makejail**:
 
 ```
+# Makejail
+
 ARG tag=latest
 
 OPTION overwrite=force
 OPTION from=ghcr.io/daemonless/immich-postgres:${tag}
 SET allow.sysvipc=1
 ```
+**Note**: Exposing ports in AppJail means that your service can be reached from remote hosts. If that is not your intention, do not expose the ports and communicate with the service using the IPv4 address assigned by the virtual network.
 
 ### Podman CLI
 
@@ -106,9 +117,28 @@ podman run -d --name immich-postgres \
   -e POSTGRES_USER=postgres \
   -e POSTGRES_PASSWORD=postgres \
   -e POSTGRES_DB=immich \
-  -v /path/to/containers/immich-postgres/var/lib/postgresql/data:/var/lib/postgresql/data \
+  -e POSTGRES_INITDB_ARGS= \
+  -v /path/to/containers/immich-postgres:/var/lib/postgresql/data \
   ghcr.io/daemonless/immich-postgres:latest
 ```
+
+### AppJail
+
+```bash
+appjail oci run -Pd \
+  -o overwrite=force \
+  -o container="args:--pull" \
+  -o virtualnet=":<random> default" \
+  -o nat \
+  -o expose="5432:5432 proto:tcp" \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=postgres \
+  -e POSTGRES_DB=immich \
+  -e POSTGRES_INITDB_ARGS= \
+  -o fstab="/path/to/containers/immich-postgres /var/lib/postgresql/data <pseudofs>" \
+  ghcr.io/daemonless/immich-postgres:latest immich-postgres
+```
+**Note**: Exposing ports in AppJail means that your service can be reached from remote hosts. If that is not your intention, do not expose the ports and communicate with the service using the IPv4 address assigned by the virtual network.
 
 ### Ansible
 
@@ -116,17 +146,18 @@ podman run -d --name immich-postgres \
 - name: Deploy immich-postgres
   containers.podman.podman_container:
     name: immich-postgres
-    image: ghcr.io/daemonless/immich-postgres:latest
+    image: "ghcr.io/daemonless/immich-postgres:latest"
     state: started
     restart_policy: always
     env:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
       POSTGRES_DB: "immich"
+      POSTGRES_INITDB_ARGS: ""
     ports:
       - "5432:5432"
     volumes:
-      - "/path/to/containers/immich-postgres/var/lib/postgresql/data:/var/lib/postgresql/data"
+      - "/path/to/containers/immich-postgres:/var/lib/postgresql/data"
     annotation:
       org.freebsd.jail.allow.sysvipc: "true"
 ```
@@ -140,6 +171,7 @@ podman run -d --name immich-postgres \
 | `POSTGRES_USER` | `postgres` | Database superuser (default: postgres) |
 | `POSTGRES_PASSWORD` | `postgres` | Database password (default: postgres) |
 | `POSTGRES_DB` | `immich` | Database name (default: immich) |
+| `POSTGRES_INITDB_ARGS` | `` | Additional initdb arguments |
 
 ### Volumes
 
@@ -173,7 +205,7 @@ allow.sysvipc
 
 **Architectures:** amd64
 **User:** `postgres` (UID/GID via PUID/PGID, defaults to 1000:1000)
-**Base:** FreeBSD 15.0
+**Base:** FreeBSD 15.1
 
 ---
 

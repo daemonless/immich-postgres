@@ -1,11 +1,11 @@
 {
-  "generated": "2026-08-01T20:20:04Z",
+  "generated": "2026-08-10T10:18:32Z",
   "image": "immich-postgres",
   "tags": {
     "14-pkg": {
       "app_version": "14.23",
       "arch": "amd64",
-      "generated": "2026-08-01T20:14:54Z",
+      "generated": "2026-08-10T10:16:18Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -42,14 +42,14 @@
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-clibs",
-            "version": "15.1p1"
+            "version": "15.1p2"
           },
           {
             "licenses": [
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-clibs-lib32",
-            "version": "15.1p1"
+            "version": "15.1p2"
           },
           {
             "licenses": [
@@ -133,7 +133,7 @@
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-mtree",
-            "version": "15.1"
+            "version": "15.1p2"
           },
           {
             "licenses": [
@@ -182,7 +182,7 @@
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-runtime",
-            "version": "15.1p1"
+            "version": "15.1p2"
           },
           {
             "licenses": [
@@ -203,7 +203,7 @@
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-utilities",
-            "version": "15.1p1"
+            "version": "15.1p2"
           },
           {
             "licenses": [
@@ -231,7 +231,7 @@
               "PD"
             ],
             "name": "FreeBSD-zoneinfo",
-            "version": "15.1"
+            "version": "15.1p2"
           },
           {
             "licenses": [
@@ -358,7 +358,7 @@
               "GPLv1+"
             ],
             "name": "perl5",
-            "version": "5.42.2"
+            "version": "5.42.3"
           },
           {
             "licenses": [
@@ -463,7 +463,7 @@
     "18-pkg": {
       "app_version": "18.4",
       "arch": "amd64",
-      "generated": "2026-08-01T20:12:23Z",
+      "generated": "2026-08-10T10:16:47Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -500,14 +500,14 @@
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-clibs",
-            "version": "15.1p1"
+            "version": "15.1p2"
           },
           {
             "licenses": [
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-clibs-lib32",
-            "version": "15.1p1"
+            "version": "15.1p2"
           },
           {
             "licenses": [
@@ -591,7 +591,7 @@
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-mtree",
-            "version": "15.1"
+            "version": "15.1p2"
           },
           {
             "licenses": [
@@ -640,7 +640,7 @@
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-runtime",
-            "version": "15.1p1"
+            "version": "15.1p2"
           },
           {
             "licenses": [
@@ -661,7 +661,7 @@
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-utilities",
-            "version": "15.1p1"
+            "version": "15.1p2"
           },
           {
             "licenses": [
@@ -689,7 +689,7 @@
               "PD"
             ],
             "name": "FreeBSD-zoneinfo",
-            "version": "15.1"
+            "version": "15.1p2"
           },
           {
             "licenses": [
@@ -816,7 +816,7 @@
               "GPLv1+"
             ],
             "name": "perl5",
-            "version": "5.42.2"
+            "version": "5.42.3"
           },
           {
             "licenses": [
