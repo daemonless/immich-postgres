@@ -11,9 +11,6 @@ Source: dbuild templates
 
 PostgreSQL with pgvector and vectorchord extensions required by Immich for vector similarity search. Defaults to PostgreSQL 14 (:latest), PostgreSQL 18 available as :18.
 
-> [!WARNING]
-> **Requires ocijail ≥ 0.6.0 (annotation support).** This image needs the jail permission **allow.sysvipc**, applied via OCI annotations. FreeBSD **quarterly ships ocijail 0.4.0, which has no annotation support** — the container starts but the permission is silently dropped, so the app can crash or misbehave at runtime. Point your pkg repos at the `latest` branch (ocijail ≥ 0.6.0), then run with the annotation flag below. See the [ocijail guide](https://daemonless.io/guides/ocijail-patch/).
-
 | | |
 |---|---|
 | **Port** | 5432 |
@@ -50,8 +47,11 @@ services:
       - "5432:5432"
     annotations:
       org.freebsd.jail.allow.sysvipc: "true"
-    restart: unless-stopped
+    # always (not unless-stopped) so FreeBSD's podman rc.d auto-starts it at boot
+    restart: always
 ```
+
+Save as `compose.yaml`, then run `podman-compose up -d`.
 
 ### AppJail Director
 **.env**:
@@ -106,6 +106,9 @@ OPTION overwrite=force
 OPTION from=ghcr.io/daemonless/immich-postgres:${tag}
 SET allow.sysvipc=1
 ```
+
+Save the files above, then run `appjail-director up`.
+
 **Note**: Exposing ports in AppJail means that your service can be reached from remote hosts. If that is not your intention, do not expose the ports and communicate with the service using the IPv4 address assigned by the virtual network.
 
 ### Podman CLI
@@ -121,6 +124,8 @@ podman run -d --name immich-postgres \
   -v /path/to/containers/immich-postgres:/var/lib/postgresql/data \
   ghcr.io/daemonless/immich-postgres:latest
 ```
+
+Save as `run.sh`, then run `sh run.sh`.
 
 ### AppJail
 
@@ -138,7 +143,40 @@ appjail oci run -Pd \
   -o fstab="/path/to/containers/immich-postgres /var/lib/postgresql/data <pseudofs>" \
   ghcr.io/daemonless/immich-postgres:latest immich-postgres
 ```
+
+Save as `run.sh`, then run `sh run.sh`.
+
 **Note**: Exposing ports in AppJail means that your service can be reached from remote hosts. If that is not your intention, do not expose the ports and communicate with the service using the IPv4 address assigned by the virtual network.
+
+### Bastille
+
+> [!WARNING]
+> Bastille's OCI support is **experimental**. It requires `buildah`, shares the host network stack (`inherit`), and persists image-declared volumes under `--data-path`.
+
+```yaml
+services:
+  immich-postgres:
+    image: "ghcr.io/daemonless/immich-postgres:latest"
+    container_name: immich-postgres
+    network_mode: host  # jail shares host networking
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=immich
+      - POSTGRES_INITDB_ARGS=
+```
+
+Save as `podman-compose.yml`, then run `bastille up`. Or via CLI:
+
+```bash
+bastille create -O \
+  --env POSTGRES_USER=postgres \
+  --env POSTGRES_PASSWORD=postgres \
+  --env POSTGRES_DB=immich \
+  --env POSTGRES_INITDB_ARGS= \
+  --data-path /path/to/containers/immich-postgres \
+  immich-postgres ghcr.io/daemonless/immich-postgres:latest inherit
+```
 
 ### Ansible
 
@@ -161,6 +199,8 @@ appjail oci run -Pd \
     annotation:
       org.freebsd.jail.allow.sysvipc: "true"
 ```
+
+Save as `immich-postgres-deploy.yaml`, then run `ansible-playbook immich-postgres-deploy.yaml`.
 
 ## Parameters
 
