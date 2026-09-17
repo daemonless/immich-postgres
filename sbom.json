@@ -1,11 +1,11 @@
 {
-  "generated": "2026-09-05T13:44:06Z",
+  "generated": "2026-09-17T13:00:35Z",
   "image": "immich-postgres",
   "tags": {
     "14-pkg": {
       "app_version": "14.24",
       "arch": "amd64",
-      "generated": "2026-09-05T13:42:27Z",
+      "generated": "2026-09-17T12:59:02Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -463,7 +463,7 @@
     "18-pkg": {
       "app_version": "18.6",
       "arch": "amd64",
-      "generated": "2026-09-05T13:43:24Z",
+      "generated": "2026-09-17T12:59:52Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
