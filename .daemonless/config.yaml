@@ -5,6 +5,9 @@ cit:
   port: 5432
 
 build:
+  architectures:
+    - amd64
+    - aarch64
   auto_version: true
   variants:
     - tag: "14-pkg"
