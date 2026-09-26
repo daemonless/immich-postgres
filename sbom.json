@@ -1,11 +1,11 @@
 {
-  "generated": "2026-09-22T07:40:00Z",
+  "generated": "2026-09-26T23:15:29Z",
   "image": "immich-postgres",
   "tags": {
-    "14-pkg": {
+    "14-pkg-amd64": {
       "app_version": "14.24",
       "arch": "amd64",
-      "generated": "2026-09-22T07:36:15Z",
+      "generated": "2026-09-26T23:14:13Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -273,7 +273,7 @@
               "MIT"
             ],
             "name": "expat",
-            "version": "2.8.2"
+            "version": "2.8.4"
           },
           {
             "licenses": [
@@ -316,7 +316,7 @@
               "MIT"
             ],
             "name": "libffi",
-            "version": "3.6.0"
+            "version": "3.8.0"
           },
           {
             "licenses": [
@@ -331,7 +331,7 @@
               "MIT"
             ],
             "name": "libxml2",
-            "version": "2.15.3"
+            "version": "2.15.4"
           },
           {
             "licenses": [
@@ -379,7 +379,7 @@
               "BSD2CLAUSE"
             ],
             "name": "pkg",
-            "version": "2.7.5"
+            "version": "2.8.4"
           },
           {
             "licenses": [
@@ -421,7 +421,7 @@
               "GPLv3"
             ],
             "name": "readline",
-            "version": "8.3.3"
+            "version": "8.3.6"
           },
           {
             "licenses": [
@@ -474,10 +474,10 @@
         "total": 62
       }
     },
-    "18-pkg": {
+    "18-pkg-amd64": {
       "app_version": "18.6",
       "arch": "amd64",
-      "generated": "2026-09-22T07:38:52Z",
+      "generated": "2026-09-26T23:14:53Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -745,7 +745,7 @@
               "MIT"
             ],
             "name": "expat",
-            "version": "2.8.2"
+            "version": "2.8.4"
           },
           {
             "licenses": [
@@ -788,7 +788,7 @@
               "MIT"
             ],
             "name": "libffi",
-            "version": "3.6.0"
+            "version": "3.8.0"
           },
           {
             "licenses": [
@@ -803,7 +803,7 @@
               "MIT"
             ],
             "name": "libxml2",
-            "version": "2.15.3"
+            "version": "2.15.4"
           },
           {
             "licenses": [
@@ -851,7 +851,7 @@
               "BSD2CLAUSE"
             ],
             "name": "pkg",
-            "version": "2.7.5"
+            "version": "2.8.4"
           },
           {
             "licenses": [
@@ -893,7 +893,7 @@
               "GPLv3"
             ],
             "name": "readline",
-            "version": "8.3.3"
+            "version": "8.3.6"
           },
           {
             "licenses": [

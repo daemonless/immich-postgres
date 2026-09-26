@@ -281,7 +281,7 @@ allow.sysvipc
 ```
 
 
-**Architectures:** amd64
+**Architectures:** amd64, aarch64
 **User:** `postgres` (UID/GID via PUID/PGID, defaults to 1000:1000)
 **Base:** FreeBSD 15.1
 
