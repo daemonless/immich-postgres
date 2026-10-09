@@ -43,7 +43,7 @@ services:
       - POSTGRES_DB=immich  # Database name (default: immich)
       - POSTGRES_INITDB_ARGS=  # Additional initdb arguments
     volumes:
-      - "/path/to/containers/immich-postgres:/var/lib/postgresql/data"
+      - "/containers/immich-postgres:/var/lib/postgresql/data"
     ports:
       - "5432:5432"
     annotations:
@@ -94,7 +94,7 @@ services:
       - immich-postgres: /var/lib/postgresql/data
 volumes:
   immich-postgres:
-    device: '/path/to/containers/immich-postgres'
+    device: '/containers/immich-postgres'
 ```
 
 **Makejail**:
@@ -129,60 +129,6 @@ Save the files above, then run `appjail-director up`.
 >
 > To avoid exposing ports, just remove the `expose` option in your `appjail-director.yml` or from your command-line arguments.
 
-### Podman CLI
-
-```bash
-podman run -d --name immich-postgres \
-  -p 5432:5432 \
-  --annotation 'org.freebsd.jail.allow.sysvipc=true' \
-  -e POSTGRES_USER=postgres \
-  -e POSTGRES_PASSWORD=postgres \
-  -e POSTGRES_DB=immich \
-  -e POSTGRES_INITDB_ARGS= \
-  -v /path/to/containers/immich-postgres:/var/lib/postgresql/data \
-  ghcr.io/daemonless/immich-postgres:latest
-```
-
-Save as `run.sh`, then run `sh run.sh`.
-
-### AppJail
-
-
-```bash
-appjail oci run -Pd \
-  -o overwrite=force \
-  -o container="args:--pull" \
-  -o virtualnet=":<random> default" \
-  -o nat \
-  -o template=template.conf \
-  -o expose="5432:5432 proto:tcp" \
-  -e POSTGRES_USER=postgres \
-  -e POSTGRES_PASSWORD=postgres \
-  -e POSTGRES_DB=immich \
-  -e POSTGRES_INITDB_ARGS= \
-  -o fstab="/path/to/containers/immich-postgres /var/lib/postgresql/data <pseudofs>" \
-  ghcr.io/daemonless/immich-postgres:latest immich-postgres
-```
-
-**template.conf**:
-```
-# template.conf
-
-exec.start: "/bin/sh /etc/rc"
-exec.stop: "/bin/sh /etc/rc.shutdown jail"
-mount.devfs
-persist
-allow.sysvipc
-```
-
-Save the files above, then run `sh run.sh`.
-
-
-> [!WARNING]
-> Exposing ports in AppJail means that your service can be reached from remote hosts. If that is not your intention, do not expose the ports and communicate with the service using the jail's IPv4 address or hostname assigned by the virtual network.
->
-> To avoid exposing ports, just remove the `expose` option in your `appjail-director.yml` or from your command-line arguments.
-
 ### Bastille
 
 > [!WARNING]
@@ -201,44 +147,10 @@ services:
       - POSTGRES_DB=immich
       - POSTGRES_INITDB_ARGS=
     volumes:
-      - "/path/to/containers/immich-postgres:/var/lib/postgresql/data"
+      - "/containers/immich-postgres:/var/lib/postgresql/data"
 ```
 
-Save as `bastille-compose.yml`, then run `bastille up`. Or via CLI:
-
-```bash
-bastille create -O \
-  --env POSTGRES_USER=postgres \
-  --env POSTGRES_PASSWORD=postgres \
-  --env POSTGRES_DB=immich \
-  --env POSTGRES_INITDB_ARGS= \
-  --volume /path/to/containers/immich-postgres /var/lib/postgresql/data \
-  immich-postgres ghcr.io/daemonless/immich-postgres:latest inherit
-```
-
-### Ansible
-
-```yaml
-- name: Deploy immich-postgres
-  containers.podman.podman_container:
-    name: immich-postgres
-    image: "ghcr.io/daemonless/immich-postgres:latest"
-    state: started
-    restart_policy: always
-    env:
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "postgres"
-      POSTGRES_DB: "immich"
-      POSTGRES_INITDB_ARGS: ""
-    ports:
-      - "5432:5432"
-    volumes:
-      - "/path/to/containers/immich-postgres:/var/lib/postgresql/data"
-    annotation:
-      org.freebsd.jail.allow.sysvipc: "true"
-```
-
-Save as `immich-postgres-deploy.yaml`, then run `ansible-playbook immich-postgres-deploy.yaml`.
+Save as `bastille-compose.yml`, then run `bastille up`.
 
 ## Parameters
 
