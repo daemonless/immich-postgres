@@ -41,7 +41,7 @@ services:
       - POSTGRES_USER=postgres  # Database superuser (default: postgres)
       - POSTGRES_PASSWORD=postgres  # Database password (default: postgres)
       - POSTGRES_DB=immich  # Database name (default: immich)
-      - POSTGRES_INITDB_ARGS=  # Additional initdb arguments
+      # - POSTGRES_INITDB_ARGS=  # Additional initdb arguments
     volumes:
       - "/containers/immich-postgres:/var/lib/postgresql/data"
     ports:
@@ -64,7 +64,6 @@ DIRECTOR_PROJECT=immich-postgres
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
 POSTGRES_DB=immich
-POSTGRES_INITDB_ARGS=
 ```
 
 **appjail-director.yml**:
@@ -89,7 +88,6 @@ services:
         - POSTGRES_USER: !ENV '${POSTGRES_USER}'
         - POSTGRES_PASSWORD: !ENV '${POSTGRES_PASSWORD}'
         - POSTGRES_DB: !ENV '${POSTGRES_DB}'
-        - POSTGRES_INITDB_ARGS: !ENV '${POSTGRES_INITDB_ARGS}'
     volumes:
       - immich-postgres: /var/lib/postgresql/data
 volumes:
@@ -145,7 +143,6 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=immich
-      - POSTGRES_INITDB_ARGS=
     volumes:
       - "/containers/immich-postgres:/var/lib/postgresql/data"
 ```
