@@ -12,7 +12,6 @@ x-daemonless:
   mlock: false
   upstream_binary: true
   appjail:
-  appjail:
     makejail:
       options:
         - "template: !ENV '${PWD}/immich-postgres.conf'"

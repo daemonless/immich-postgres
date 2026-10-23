@@ -21,3 +21,7 @@ build:
       args:
         PG_VERSION: "18"
       aliases: ["18"]
+
+# Component of the daemonless/immich stack -- not a standalone catalog app.
+fjord:
+  exclude: true
