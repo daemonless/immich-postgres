@@ -1,11 +1,11 @@
 {
-  "generated": "2026-10-20T22:41:25Z",
+  "generated": "2026-10-23T12:03:12Z",
   "image": "immich-postgres",
   "tags": {
     "14-pkg-aarch64": {
       "app_version": "14.24",
       "arch": "aarch64",
-      "generated": "2026-10-20T22:40:08Z",
+      "generated": "2026-10-23T12:01:38Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -189,7 +189,7 @@
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-runtime",
-            "version": "15.1p4"
+            "version": "15.1p5"
           },
           {
             "licenses": [
@@ -238,7 +238,7 @@
               "PD"
             ],
             "name": "FreeBSD-zoneinfo",
-            "version": "15.1p4"
+            "version": "15.1p5"
           },
           {
             "licenses": [
@@ -252,14 +252,7 @@
               "MPL20"
             ],
             "name": "ca_root_nss",
-            "version": "3.130"
-          },
-          {
-            "licenses": [
-              "ISCL"
-            ],
-            "name": "execline",
-            "version": "2.9.8.1"
+            "version": "3.131"
           },
           {
             "licenses": [
@@ -407,7 +400,7 @@
               "PSFL"
             ],
             "name": "python312",
-            "version": "3.12.14_1"
+            "version": "3.12.15"
           },
           {
             "licenses": [
@@ -415,20 +408,6 @@
             ],
             "name": "readline",
             "version": "8.3.6"
-          },
-          {
-            "licenses": [
-              "ISCL"
-            ],
-            "name": "s6",
-            "version": "2.14.0.1"
-          },
-          {
-            "licenses": [
-              "ISCL"
-            ],
-            "name": "skalibs",
-            "version": "2.14.5.1"
           },
           {
             "licenses": [
@@ -456,7 +435,7 @@
       "source": "upstream",
       "summary": {
         "dotnet": 0,
-        "freebsd": 60,
+        "freebsd": 57,
         "go": 0,
         "java": 0,
         "node": 0,
@@ -464,13 +443,13 @@
         "python": 1,
         "ruby": 0,
         "rust": 0,
-        "total": 61
+        "total": 58
       }
     },
     "18-pkg-aarch64": {
       "app_version": "18.6",
       "arch": "aarch64",
-      "generated": "2026-10-20T22:40:13Z",
+      "generated": "2026-10-23T12:01:43Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -654,7 +633,7 @@
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-runtime",
-            "version": "15.1p4"
+            "version": "15.1p5"
           },
           {
             "licenses": [
@@ -703,7 +682,7 @@
               "PD"
             ],
             "name": "FreeBSD-zoneinfo",
-            "version": "15.1p4"
+            "version": "15.1p5"
           },
           {
             "licenses": [
@@ -717,14 +696,7 @@
               "MPL20"
             ],
             "name": "ca_root_nss",
-            "version": "3.130"
-          },
-          {
-            "licenses": [
-              "ISCL"
-            ],
-            "name": "execline",
-            "version": "2.9.8.1"
+            "version": "3.131"
           },
           {
             "licenses": [
@@ -872,7 +844,7 @@
               "PSFL"
             ],
             "name": "python312",
-            "version": "3.12.14_1"
+            "version": "3.12.15"
           },
           {
             "licenses": [
@@ -880,20 +852,6 @@
             ],
             "name": "readline",
             "version": "8.3.6"
-          },
-          {
-            "licenses": [
-              "ISCL"
-            ],
-            "name": "s6",
-            "version": "2.14.0.1"
-          },
-          {
-            "licenses": [
-              "ISCL"
-            ],
-            "name": "skalibs",
-            "version": "2.14.5.1"
           },
           {
             "licenses": [
@@ -921,7 +879,7 @@
       "source": "upstream",
       "summary": {
         "dotnet": 0,
-        "freebsd": 60,
+        "freebsd": 57,
         "go": 0,
         "java": 0,
         "node": 0,
@@ -929,7 +887,7 @@
         "python": 1,
         "ruby": 0,
         "rust": 0,
-        "total": 61
+        "total": 58
       }
     }
   }
