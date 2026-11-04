@@ -1,11 +1,11 @@
 {
-  "generated": "2026-10-23T11:10:58Z",
+  "generated": "2026-11-04T10:54:13Z",
   "image": "immich-postgres",
   "tags": {
     "14-pkg-amd64": {
       "app_version": "14.24",
       "arch": "amd64",
-      "generated": "2026-10-23T11:09:31Z",
+      "generated": "2026-11-04T10:53:34Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -196,7 +196,7 @@
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-runtime",
-            "version": "15.1p5"
+            "version": "15.1p6"
           },
           {
             "licenses": [
@@ -259,7 +259,7 @@
               "MPL20"
             ],
             "name": "ca_root_nss",
-            "version": "3.131"
+            "version": "3.132"
           },
           {
             "licenses": [
@@ -456,7 +456,7 @@
     "18-pkg-amd64": {
       "app_version": "18.6",
       "arch": "amd64",
-      "generated": "2026-10-23T11:09:59Z",
+      "generated": "2026-11-04T10:51:09Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -647,7 +647,7 @@
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-runtime",
-            "version": "15.1p5"
+            "version": "15.1p6"
           },
           {
             "licenses": [
@@ -710,7 +710,7 @@
               "MPL20"
             ],
             "name": "ca_root_nss",
-            "version": "3.131"
+            "version": "3.132"
           },
           {
             "licenses": [
