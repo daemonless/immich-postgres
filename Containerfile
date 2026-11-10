@@ -7,29 +7,35 @@
 ARG PG_VERSION=14
 ARG VECTORCHORD_VERSION=0.5.3
 
-# Builder stage - compile extensions
+# Builder stage - compile VectorChord when no binary package exists (PG 14)
 FROM ghcr.io/daemonless/postgres:${PG_VERSION} AS builder
+ARG PG_VERSION
 ARG VECTORCHORD_VERSION
 
-# Build dependencies
-RUN pkg update && pkg install -y \
-    FreeBSD-bmake FreeBSD-clibs-dev FreeBSD-clang FreeBSD-clang-dev FreeBSD-toolchain \
-    FreeBSD-libexecinfo FreeBSD-libexecinfo-dev FreeBSD-runtime-dev FreeBSD-utilities-dev \
-    rust gmake git-lite pkgconf \
-    && pkg clean -ay
-
-# Build VectorChord from source
-RUN fetch -qo /tmp/vectorchord.tar.gz \
-    "https://github.com/tensorchord/VectorChord/archive/refs/tags/${VECTORCHORD_VERSION}.tar.gz" && \
-    tar -xzf /tmp/vectorchord.tar.gz -C /tmp && \
-    cd /tmp/VectorChord-${VECTORCHORD_VERSION} && \
-    gmake build && \
-    gmake install
+# Build VectorChord from source only if postgresql${PG_VERSION}-vchord is not in pkg
+RUN pkg update && \
+    mkdir -p /out/lib /out/ext && \
+    if ! pkg rquery '%v' "postgresql${PG_VERSION}-vchord" >/dev/null 2>&1; then \
+        pkg install -y \
+            FreeBSD-bmake FreeBSD-clibs-dev FreeBSD-clang FreeBSD-clang-dev FreeBSD-toolchain \
+            FreeBSD-libexecinfo FreeBSD-libexecinfo-dev FreeBSD-runtime-dev FreeBSD-utilities-dev \
+            rust gmake git-lite pkgconf && \
+        fetch -qo /tmp/vectorchord.tar.gz \
+            "https://github.com/tensorchord/VectorChord/archive/refs/tags/${VECTORCHORD_VERSION}.tar.gz" && \
+        tar -xzf /tmp/vectorchord.tar.gz -C /tmp && \
+        cd /tmp/VectorChord-${VECTORCHORD_VERSION} && \
+        gmake build && \
+        gmake install && \
+        cp /usr/local/lib/postgresql/vchord.so /out/lib/ && \
+        cp /usr/local/share/postgresql/extension/vchord* /out/ext/; \
+    fi && \
+    pkg clean -ay && rm -rf /var/cache/pkg/* /var/db/pkg/repos/*
 
 # Production image
 FROM ghcr.io/daemonless/postgres:${PG_VERSION}
 
 ARG FREEBSD_ARCH=amd64
+ARG PG_VERSION
 ARG VECTORCHORD_VERSION
 ARG HEALTHCHECK_ENDPOINT="pg_isready -U postgres"
 
@@ -51,13 +57,20 @@ LABEL org.opencontainers.image.title="Immich PostgreSQL" \
       io.daemonless.healthcheck-cmd="${HEALTHCHECK_ENDPOINT}" \
       org.freebsd.jail.allow.sysvipc="required"
 
-# Copy VectorChord extension from builder (pgvector already in base image)
-COPY --from=builder /usr/local/lib/postgresql/vchord.so /usr/local/lib/postgresql/
-COPY --from=builder /usr/local/share/postgresql/extension/vchord* /usr/local/share/postgresql/extension/
-
-# Fix permissions
-RUN chmod 644 /usr/local/share/postgresql/extension/vchord* && \
-    chmod 755 /usr/local/lib/postgresql/vchord.so
+# Install VectorChord extension from pkg when available (PG 18), or copy from builder (PG 14)
+COPY --from=builder /out /tmp/vchord-out
+RUN if [ -f /tmp/vchord-out/lib/vchord.so ]; then \
+        cp /tmp/vchord-out/lib/vchord.so /usr/local/lib/postgresql/ && \
+        cp /tmp/vchord-out/ext/vchord* /usr/local/share/postgresql/extension/ && \
+        chmod 644 /usr/local/share/postgresql/extension/vchord* && \
+        chmod 755 /usr/local/lib/postgresql/vchord.so; \
+    else \
+        pkg update && \
+        pkg install -y "postgresql${PG_VERSION}-vchord" && \
+        pkg clean -ay && \
+        rm -rf /var/cache/pkg/* /var/db/pkg/repos/*; \
+    fi && \
+    rm -rf /tmp/vchord-out
 
 # Copy init scripts for extensions
 COPY docker-entrypoint-initdb.d/ /docker-entrypoint-initdb.d/
