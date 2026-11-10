@@ -32,7 +32,7 @@ x-daemonless:
     persist
     allow.sysvipc
     ```
-  
+
   docs:
     env:
       POSTGRES_USER: "Database superuser (default: postgres)"
