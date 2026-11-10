@@ -1,11 +1,11 @@
 {
-  "generated": "2026-11-04T11:49:56Z",
+  "generated": "2026-11-10T15:33:48Z",
   "image": "immich-postgres",
   "tags": {
     "14-pkg-aarch64": {
       "app_version": "14.24",
       "arch": "aarch64",
-      "generated": "2026-11-04T11:48:15Z",
+      "generated": "2026-11-10T15:32:00Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -449,7 +449,7 @@
     "18-pkg-aarch64": {
       "app_version": "18.6",
       "arch": "aarch64",
-      "generated": "2026-11-04T11:48:20Z",
+      "generated": "2026-11-10T15:32:06Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -841,6 +841,14 @@
           },
           {
             "licenses": [
+              "AGPLv3",
+              "EPL"
+            ],
+            "name": "postgresql18-vchord",
+            "version": "1.1.1_3"
+          },
+          {
+            "licenses": [
               "PSFL"
             ],
             "name": "python312",
@@ -879,7 +887,7 @@
       "source": "upstream",
       "summary": {
         "dotnet": 0,
-        "freebsd": 57,
+        "freebsd": 58,
         "go": 0,
         "java": 0,
         "node": 0,
@@ -887,7 +895,7 @@
         "python": 1,
         "ruby": 0,
         "rust": 0,
-        "total": 58
+        "total": 59
       }
     }
   }
