@@ -31,11 +31,7 @@ FROM ghcr.io/daemonless/postgres:${PG_VERSION}
 ARG FREEBSD_ARCH=amd64
 ARG PG_VERSION
 ARG VECTORCHORD_VERSION
-{%- if ports %}
 ARG HEALTHCHECK_ENDPOINT="pg_isready -U postgres"
-{%- else %}
-ARG HEALTHCHECK_ENDPOINT="pg_isready -U postgres"
-{%- endif %}
 
 ENV HEALTHCHECK_CMD="${HEALTHCHECK_ENDPOINT}"
 

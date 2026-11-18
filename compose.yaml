@@ -23,14 +23,21 @@ x-daemonless:
     stay on `:14` — PostgreSQL major version upgrades require a full `pg_dumpall` and restore.
     The default `:latest` tag will follow whatever version Immich recommends upstream.
 
-    PostgreSQL requires `allow.sysvipc` for shared memory. Create `immich-postgres.conf` alongside `appjail-director.yml`:
+    PostgreSQL needs System V shared memory, which a jail does not get by default.
+    Create `immich-postgres.conf` alongside `appjail-director.yml`, the same as the
+    Immich stack's `immich-postgres-template.conf` (`allow.sysvipc` alone does nothing
+    on FreeBSD 15; the jail needs its own `sysv*: new` namespaces):
 
     ```
     exec.start: "/bin/sh /etc/rc"
     exec.stop: "/bin/sh /etc/rc.shutdown jail"
+    sysvmsg: new
+    sysvsem: new
+    sysvshm: new
     mount.devfs
     persist
-    allow.sysvipc
+    ip4: inherit
+    ip6: inherit
     ```
 
   docs:
