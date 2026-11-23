@@ -20,6 +20,7 @@ build:
       pkg_name: postgresql18-server
       args:
         PG_VERSION: "18"
+        VECTORCHORD_VERSION: "pkg"
       aliases: ["18"]
 
 # Component of the daemonless/immich stack -- not a standalone catalog app.

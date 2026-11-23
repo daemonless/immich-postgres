@@ -174,19 +174,26 @@ Save as `bastille-compose.yml`, then run `bastille up`.
 
 This image is part of the [Immich Stack](https://daemonless.io/images/immich).
 
-**PostgreSQL version:** `:latest` and `:14` use PostgreSQL 14. `:18` uses PostgreSQL 18.
-New installations should consider `:18`. If you are migrating an existing Immich instance,
-stay on `:14` — PostgreSQL major version upgrades require a full `pg_dumpall` and restore.
-The default `:latest` tag will follow whatever version Immich recommends upstream.
+**PostgreSQL version:** `:18` uses PostgreSQL 18 with VectorChord and pgvector from
+FreeBSD packages (recommended for new installs). `:latest` and `:14` remain on
+PostgreSQL 14 so existing deployments never break on pull; upgrading an existing
+PostgreSQL 14 database to 18 requires a full `pg_dumpall` and restore.
 
-PostgreSQL requires `allow.sysvipc` for shared memory. Create `immich-postgres.conf` alongside `appjail-director.yml`:
+PostgreSQL needs System V shared memory, which a jail does not get by default.
+Create `immich-postgres.conf` alongside `appjail-director.yml`, the same as the
+Immich stack's `immich-postgres-template.conf` (`allow.sysvipc` alone does nothing
+on FreeBSD 15; the jail needs its own `sysv*: new` namespaces):
 
 ```
 exec.start: "/bin/sh /etc/rc"
 exec.stop: "/bin/sh /etc/rc.shutdown jail"
+sysvmsg: new
+sysvsem: new
+sysvshm: new
 mount.devfs
 persist
-allow.sysvipc
+ip4: inherit
+ip6: inherit
 ```
 
 
