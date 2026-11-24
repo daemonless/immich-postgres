@@ -18,10 +18,10 @@ x-daemonless:
   notes: |
     This image is part of the [Immich Stack](https://daemonless.io/images/immich).
 
-    **PostgreSQL version:** `:latest` and `:14` use PostgreSQL 14. `:18` uses PostgreSQL 18.
-    New installations should consider `:18`. If you are migrating an existing Immich instance,
-    stay on `:14` — PostgreSQL major version upgrades require a full `pg_dumpall` and restore.
-    The default `:latest` tag will follow whatever version Immich recommends upstream.
+    **PostgreSQL version:** `:18` uses PostgreSQL 18 with VectorChord and pgvector from
+    FreeBSD packages (recommended for new installs). `:latest` and `:14` remain on
+    PostgreSQL 14 so existing deployments never break on pull; upgrading an existing
+    PostgreSQL 14 database to 18 requires a full `pg_dumpall` and restore.
 
     PostgreSQL needs System V shared memory, which a jail does not get by default.
     Create `immich-postgres.conf` alongside `appjail-director.yml`, the same as the
