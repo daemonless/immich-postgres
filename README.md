@@ -10,7 +10,7 @@ Source: dbuild templates
 [![OCI Pulls](https://img.shields.io/docker/pulls/daemonless/immich-postgres?style=flat-square&label=OCI+Pulls&color=blue)](https://hub.docker.com/r/daemonless/immich-postgres)
 [![sysvipc Required](https://img.shields.io/badge/sysvipc-required-orange?style=flat-square&logo=freebsd&logoColor=white)](https://daemonless.io/guides/ocijail-patch/)
 
-PostgreSQL with pgvector and vectorchord extensions required by Immich for vector similarity search. Defaults to PostgreSQL 14 (:latest), PostgreSQL 18 available as :18.
+PostgreSQL with pgvector and vectorchord extensions required by Immich for vector similarity search. Defaults to PostgreSQL 14 (:latest), PostgreSQL 18 (:18) and PostgreSQL 19 (:19) available.
 
 | | |
 |---|---|
@@ -19,13 +19,35 @@ PostgreSQL with pgvector and vectorchord extensions required by Immich for vecto
 | **Source** | [https://github.com/immich-app/immich](https://github.com/immich-app/immich) |
 | **Website** | [https://immich.app/](https://immich.app/) |
 
-## Version Tags
-| Tag | Description | Best For |
-| :--- | :--- | :--- |
-| `14` / `14-pkg` / `latest` | **Upstream Binary**. Built from official release. | Most users — recommended. |
-| `18` / `18-pkg` | **Upstream Binary**. Built from official release. | Alternative build. |
+This image is part of the [Immich Stack](https://daemonless.io/images/immich).
+
+**PostgreSQL version:** `:18` and `:19` are recommended for new installs.
+`:18` uses VectorChord and pgvector from FreeBSD packages; `:19` compiles
+VectorChord 1.5.0 (pgsty/vchord) and pgvector 0.8.7 from source because the
+FreeBSD package repository only builds the default PostgreSQL flavor.
+`:latest` and `:14` remain on PostgreSQL 14 so existing deployments never
+break on pull. Upgrading across major versions (14 -> 18 or 18 -> 19)
+requires a full `pg_dumpall` and restore.
+
+PostgreSQL needs System V shared memory, which a jail does not get by default.
+Create `immich-postgres.conf` alongside `appjail-director.yml`, the same as the
+Immich stack's `immich-postgres-template.conf` (`allow.sysvipc` alone does nothing
+on FreeBSD 15; the jail needs its own `sysv*: new` namespaces):
+
+```
+exec.start: "/bin/sh /etc/rc"
+exec.stop: "/bin/sh /etc/rc.shutdown jail"
+sysvmsg: new
+sysvsem: new
+sysvshm: new
+mount.devfs
+persist
+ip4: inherit
+ip6: inherit
+```
 
 ## Prerequisites
+
 Before deploying, ensure your host environment is ready. See the [Quick Start Guide](https://daemonless.io/guides/quick-start) for host setup instructions.
 
 ## Deployment
@@ -172,30 +194,12 @@ Save as `bastille-compose.yml`, then run `bastille up`.
 |------|----------|-------------|
 | `5432` | TCP | PostgreSQL Port |
 
-This image is part of the [Immich Stack](https://daemonless.io/images/immich).
-
-**PostgreSQL version:** `:18` uses PostgreSQL 18 with VectorChord and pgvector from
-FreeBSD packages (recommended for new installs). `:latest` and `:14` remain on
-PostgreSQL 14 so existing deployments never break on pull; upgrading an existing
-PostgreSQL 14 database to 18 requires a full `pg_dumpall` and restore.
-
-PostgreSQL needs System V shared memory, which a jail does not get by default.
-Create `immich-postgres.conf` alongside `appjail-director.yml`, the same as the
-Immich stack's `immich-postgres-template.conf` (`allow.sysvipc` alone does nothing
-on FreeBSD 15; the jail needs its own `sysv*: new` namespaces):
-
-```
-exec.start: "/bin/sh /etc/rc"
-exec.stop: "/bin/sh /etc/rc.shutdown jail"
-sysvmsg: new
-sysvsem: new
-sysvshm: new
-mount.devfs
-persist
-ip4: inherit
-ip6: inherit
-```
-
+## Version Tags
+| Tag | Description | Best For |
+| :--- | :--- | :--- |
+| `14` / `14-pkg` / `latest` | **Upstream Binary**. Built from official release. | Most users — recommended. |
+| `18` / `18-pkg` | **Upstream Binary**. Built from official release. | Alternative build. |
+| `19` / `19-pkg` | **Upstream Binary**. Built from official release. | Alternative build. |
 
 **Architectures:** amd64, aarch64
 **User:** `postgres` (UID/GID via PUID/PGID, defaults to 1000:1000)

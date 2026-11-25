@@ -22,6 +22,15 @@ build:
         PG_VERSION: "18"
         VECTORCHORD_VERSION: "pkg"
       aliases: ["18"]
+    # PG 14 is stuck on VectorChord 0.5.3: the pgsty/vchord fork supports
+    # PostgreSQL 15-19 only.
+    - tag: "19-pkg"
+      pkg_name: postgresql19-server
+      args:
+        PG_VERSION: "19"
+        VECTORCHORD_VERSION: "1.5.0"
+        VECTORCHORD_REPO: "pgsty/vchord"
+      aliases: ["19"]
 
 # Component of the daemonless/immich stack -- not a standalone catalog app.
 fjord:
