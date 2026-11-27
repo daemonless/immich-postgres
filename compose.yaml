@@ -4,7 +4,7 @@ x-daemonless:
   title: "Immich PostgreSQL"
   icon: ":simple-postgresql:"
   category: "Databases"
-  description: "PostgreSQL with pgvector and vectorchord extensions required by Immich for vector similarity search. Defaults to PostgreSQL 14 (:latest), PostgreSQL 18 available as :18."
+  description: "PostgreSQL with pgvector and vectorchord extensions required by Immich for vector similarity search. Defaults to PostgreSQL 14 (:latest), PostgreSQL 18 (:18) and PostgreSQL 19 (:19) available."
   upstream_url: "https://github.com/immich-app/immich"
   web_url: "https://immich.app/"
   freshports_url: "https://www.freshports.org/databases/postgresql14-server/"
@@ -18,10 +18,13 @@ x-daemonless:
   notes: |
     This image is part of the [Immich Stack](https://daemonless.io/images/immich).
 
-    **PostgreSQL version:** `:18` uses PostgreSQL 18 with VectorChord and pgvector from
-    FreeBSD packages (recommended for new installs). `:latest` and `:14` remain on
-    PostgreSQL 14 so existing deployments never break on pull; upgrading an existing
-    PostgreSQL 14 database to 18 requires a full `pg_dumpall` and restore.
+    **PostgreSQL version:** `:18` and `:19` are recommended for new installs.
+    `:18` uses VectorChord and pgvector from FreeBSD packages; `:19` compiles
+    VectorChord 1.5.0 (pgsty/vchord) and pgvector 0.8.7 from source because the
+    FreeBSD package repository only builds the default PostgreSQL flavor.
+    `:latest` and `:14` remain on PostgreSQL 14 so existing deployments never
+    break on pull. Upgrading across major versions (14 -> 18 or 18 -> 19)
+    requires a full `pg_dumpall` and restore.
 
     PostgreSQL needs System V shared memory, which a jail does not get by default.
     Create `immich-postgres.conf` alongside `appjail-director.yml`, the same as the

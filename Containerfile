@@ -6,24 +6,29 @@
 
 ARG PG_VERSION=14
 ARG VECTORCHORD_VERSION=0.5.3
+ARG VECTORCHORD_REPO=tensorchord/VectorChord
 
-# Builder stage - compile VectorChord when no binary package exists (PG 14)
+# Builder stage - compile VectorChord when no package exists (PG 14) or when a
+# variant pins an explicit version (PG 19)
 FROM ghcr.io/daemonless/postgres:${PG_VERSION} AS builder
 ARG PG_VERSION
 ARG VECTORCHORD_VERSION
+ARG VECTORCHORD_REPO
 
-# Build VectorChord from source only if postgresql${PG_VERSION}-vchord is not in pkg
+# Build VectorChord from source when the variant pins a version ("pkg" means:
+# use the FreeBSD package), or when postgresql${PG_VERSION}-vchord is not in pkg
 RUN pkg update && \
     mkdir -p /out/lib /out/ext && \
-    if ! pkg rquery '%v' "postgresql${PG_VERSION}-vchord" >/dev/null 2>&1; then \
+    if [ "${VECTORCHORD_VERSION}" != "pkg" ] || \
+       ! pkg rquery '%v' "postgresql${PG_VERSION}-vchord" >/dev/null 2>&1; then \
         pkg install -y \
             FreeBSD-bmake FreeBSD-clibs-dev FreeBSD-clang FreeBSD-clang-dev FreeBSD-toolchain \
             FreeBSD-libexecinfo FreeBSD-libexecinfo-dev FreeBSD-runtime-dev FreeBSD-utilities-dev \
             rust gmake git-lite pkgconf && \
         fetch -qo /tmp/vectorchord.tar.gz \
-            "https://github.com/tensorchord/VectorChord/archive/refs/tags/${VECTORCHORD_VERSION}.tar.gz" && \
+            "https://github.com/${VECTORCHORD_REPO}/archive/refs/tags/${VECTORCHORD_VERSION}.tar.gz" && \
         tar -xzf /tmp/vectorchord.tar.gz -C /tmp && \
-        cd /tmp/VectorChord-${VECTORCHORD_VERSION} && \
+        cd "/tmp/$(basename "${VECTORCHORD_REPO}")-${VECTORCHORD_VERSION}" && \
         gmake build && \
         gmake install && \
         cp /usr/local/lib/postgresql/vchord.so /out/lib/ && \
@@ -43,7 +48,7 @@ ENV HEALTHCHECK_CMD="${HEALTHCHECK_ENDPOINT}"
 
 # --- Metadata (Injected by Generator) ---
 LABEL org.opencontainers.image.title="Immich PostgreSQL" \
-      org.opencontainers.image.description="PostgreSQL with pgvector and vectorchord extensions required by Immich for vector similarity search. Defaults to PostgreSQL 14 (:latest), PostgreSQL 18 available as :18." \
+      org.opencontainers.image.description="PostgreSQL with pgvector and vectorchord extensions required by Immich for vector similarity search. Defaults to PostgreSQL 14 (:latest), PostgreSQL 18 (:18) and PostgreSQL 19 (:19) available." \
       org.opencontainers.image.source="https://github.com/daemonless/immich-postgres" \
       org.opencontainers.image.url="https://immich.app/" \
       org.opencontainers.image.licenses="PostgreSQL" \
@@ -57,7 +62,7 @@ LABEL org.opencontainers.image.title="Immich PostgreSQL" \
       io.daemonless.healthcheck-cmd="${HEALTHCHECK_ENDPOINT}" \
       org.freebsd.jail.allow.sysvipc="required"
 
-# Install VectorChord extension from pkg when available (PG 18), or copy from builder (PG 14)
+# Install VectorChord from pkg when available (PG 18), or copy the source build (PG 14/19)
 COPY --from=builder /out /tmp/vchord-out
 RUN if [ -f /tmp/vchord-out/lib/vchord.so ]; then \
         cp /tmp/vchord-out/lib/vchord.so /usr/local/lib/postgresql/ && \
